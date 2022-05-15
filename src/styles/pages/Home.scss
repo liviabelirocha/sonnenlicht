@@ -1,0 +1,28 @@
+@import "../utils/variables.scss"; 
+
+.home-layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.filter {
+    margin-bottom: 5vh;
+    display: flex;
+    justify-content: center;
+
+    .city {
+        background-color: transparent;
+        color: $clr-neutral-darkest;
+        border-radius: 0.2rem;
+        height: 5vh;
+        width: 50%;
+    }
+}
+
+.content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 16rem));
+    gap: 2rem;
+    justify-content: center;
+}
