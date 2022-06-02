@@ -1,12 +1,12 @@
 # Sonnenlicht
 
-## Mais informações sobre o projeto
+Repositório do projeto Sonnenlicht.
 
-O projeto segue uma [especificação](https://docs.google.com/document/d/1ydcT9kBhn0GFRWxilNdp7w4b5q0kntP__tKaWX1XbSU/edit?usp=sharing).
-## Scripts
+Mais detalhes estão disponíveis nas instruções dos ambientes front e back.
 
-Para rodar no modo de desenvolvimento faça:
+## CONTRIBUTORS
 
-```npm start```
-
-Em seguida, abra o navegador em [http://localhost:3000](http://localhost:3000).
+- [Gabriel Camurça](https://github.com/unknown)
+- [Diego Freitas](https://github.com/unknown)
+- [Lívia Belizário](https://github.com/unknown)
+- [Matheus Silva](https://github.com/unknown)
