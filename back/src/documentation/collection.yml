@@ -13,15 +13,15 @@ components:
       type: http
       scheme: bearer
 tags:
-  - name: Properties
+  - name: Offers
   - name: Users
   - name: Auth
 paths:
-  /properties:
+  /offers:
     get:
       tags:
-        - Properties
-      summary: Get All Properties
+        - Offers
+      summary: Get All Offers
       security:
         - noauthAuth: []
       parameters:
@@ -29,9 +29,33 @@ paths:
           in: header
           schema:
             type: string
-          example: '{{token}}'
+          example: "{{token}}"
+        - in: query
+          name: type
+          description: the type of the properties
+          example: small house
+          schema:
+            type: string
+        - in: query
+          name: minprice
+          description: the minimum price of the properties
+          example: 10000
+          schema:
+            type: number
+        - in: query
+          name: maxprice
+          description: the maximum price of the properties
+          example: 20000
+          schema:
+            type: number
+        - in: query
+          name: location
+          description: the location of the properties
+          example: stadtbezirk
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -54,15 +78,15 @@ paths:
                   addressNumber: 420
                   addressStreet: street
                   ownerId: id
-  /my-properties:
+  /my-offers:
     get:
       tags:
-        - Properties
-      summary: Get My Properties
+        - Offers
+      summary: Get My Offers
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -83,11 +107,18 @@ paths:
                   addressLocation: location
                   addressNumber: 420
                   addressStreet: street
-  /property/{id}:
+        "401":
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: null
+  /offer/{id}:
     get:
       tags:
-        - Properties
-      summary: Get Property
+        - Offers
+      summary: Get Offer
       security:
         - noauthAuth: []
       parameters:
@@ -97,7 +128,7 @@ paths:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -112,21 +143,35 @@ paths:
                 addressNumber: 420
                 addressStreet: street
                 ownerId: id
-  /property-owner/{propertyId}:
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+  /offer-owner/{offerId}:
     get:
       tags:
-        - Properties
+        - Offers
       summary: Get Owner
       security:
         - noauthAuth: []
       parameters:
-        - name: propertyId
+        - name: offerId
           in: path
           schema:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -134,11 +179,28 @@ paths:
                 type: object
               example:
                 ownerId: id
+                email: email@test.com
+                phoneNumber: "99999999"
+                name: test
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
   /approve/{id}:
     patch:
       tags:
-        - Properties
-      summary: Approve Property
+        - Offers
+      summary: Approve Offer
       requestBody:
         content: {}
       security:
@@ -150,8 +212,43 @@ paths:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+              example:
+                price: 420000
+                title: Title
+                offerType: sell
+                propertyType: small house
+                addressLocation: location
+                addressNumber: 420
+                addressStreet: street
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "401":
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: null
+        "403":
+          description: Forbidden
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: null
+        "404":
+          description: Not Found
           content:
             text/plain:
               schema:
@@ -160,8 +257,8 @@ paths:
   /reject/{id}:
     patch:
       tags:
-        - Properties
-      summary: Reject Property
+        - Offers
+      summary: Reject Offer
       requestBody:
         content: {}
       security:
@@ -173,8 +270,43 @@ paths:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+              example:
+                price: 420000
+                title: Title
+                offerType: sell
+                propertyType: small house
+                addressLocation: location
+                addressNumber: 420
+                addressStreet: street
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "401":
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: null
+        "403":
+          description: Forbidden
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: null
+        "404":
+          description: Not Found
           content:
             text/plain:
               schema:
@@ -183,7 +315,7 @@ paths:
   /retry/{id}:
     patch:
       tags:
-        - Properties
+        - Offers
       summary: Retry
       requestBody:
         content: {}
@@ -194,17 +326,52 @@ paths:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             text/plain:
               schema:
                 type: string
+              example:
+                price: 420000
+                title: Title
+                offerType: sell
+                propertyType: small house
+                addressLocation: location
+                addressNumber: 420
+                addressStreet: street
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
               example: null
-  /new-property:
+        "401":
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: null
+        "403":
+          description: Forbidden
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: null
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: null
+  /new-offer:
     post:
       tags:
-        - Properties
+        - Offers
       summary: Create Offer
       requestBody:
         content:
@@ -220,12 +387,27 @@ paths:
                 addressNumber: 420
                 addressStreet: street
       responses:
-        '201':
+        "201":
           description: Created
           content:
             text/plain:
               schema:
                 type: string
+              example:
+                price: 420000
+                title: Title
+                offerType: sell
+                propertyType: small house
+                addressLocation: location
+                addressNumber: 420
+                addressStreet: street
+                ownerId: id
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
               example: null
   /user/{id}:
     patch:
@@ -248,13 +430,45 @@ paths:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
-              example: {}
+              example:
+                email: email@test.com
+                phoneNumber: "99999999"
+                name: test
+                role: admin
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
     delete:
       tags:
         - Users
@@ -268,13 +482,57 @@ paths:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             text/plain:
               schema:
                 type: string
+              example:
+                email: email@test.com
+                phoneNumber: "99999999"
+                name: test
+                role: owner
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
               example: null
+        "401":
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                type: string
+              example:
+                email: email@test.com
+                phoneNumber: "99999999"
+                name: test
+                role: owner
+        "403":
+          description: Forbidden
+          content:
+            text/plain:
+              schema:
+                type: string
+              example:
+                email: email@test.com
+                phoneNumber: "99999999"
+                name: test
+                role: owner
+        "404":
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                type: string
+              example:
+                email: email@test.com
+                phoneNumber: "99999999"
+                name: test
+                role: owner
     put:
       tags:
         - Users
@@ -285,7 +543,7 @@ paths:
             schema:
               type: object
               example:
-                phoneNumber: '99999999'
+                phoneNumber: "99999999"
                 name: test
       security:
         - bearerAuth: []
@@ -296,7 +554,7 @@ paths:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -304,9 +562,37 @@ paths:
                 type: object
               example:
                 email: email@test.com
-                phoneNumber: '99999999'
+                phoneNumber: "99999999"
                 name: test
                 role: owner
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
     get:
       tags:
         - Users
@@ -320,7 +606,7 @@ paths:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -328,9 +614,23 @@ paths:
                 type: object
               example:
                 email: email@test.com
-                phoneNumber: '99999999'
+                phoneNumber: "99999999"
                 name: test
                 role: owner
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
   /users:
     get:
       tags:
@@ -339,7 +639,7 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -347,13 +647,27 @@ paths:
                 type: object
               example:
                 - email: email2@test.com
-                  phoneNumber: '99999999'
+                  phoneNumber: "99999999"
                   name: test
                   role: owner
                 - email: email2@test.com
-                  phoneNumber: '99999999'
+                  phoneNumber: "99999999"
                   name: test2
                   role: owner
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
   /register:
     post:
       tags:
@@ -367,18 +681,30 @@ paths:
               example:
                 email: email@test.com
                 password: test
-                phoneNumber: '99999999'
+                phoneNumber: "99999999"
                 name: test
                 role: owner
       security:
         - noauthAuth: []
       responses:
-        '201':
+        "201":
           description: Created
           content:
             text/plain:
               schema:
                 type: string
+              example:
+                email: email@test.com
+                password: test
+                phoneNumber: "99999999"
+                name: test
+                role: owner
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
               example: null
   /auth:
     post:
@@ -396,7 +722,7 @@ paths:
       security:
         - noauthAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -404,11 +730,18 @@ paths:
                 type: object
               example:
                 token: some_JWT
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
   /reset-password:
     patch:
       tags:
         - Auth
-      summary: New Request
+      summary: New Password
       requestBody:
         content:
           application/json:
@@ -419,10 +752,24 @@ paths:
                 resetToken: token
                 newPassword: password
       responses:
-        '200':
+        "200":
           description: OK
           content:
             text/plain:
               schema:
                 type: string
+              example: null
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example: null
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
               example: null
