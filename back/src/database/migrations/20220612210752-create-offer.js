@@ -7,17 +7,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID,
       },
-      price: DataTypes.DECIMAL,
-      title: DataTypes.STRING,
-      offerType: DataTypes.ENUM("rent", "sell"),
-      propertyType: DataTypes.ENUM("small house", "apartment", "mansion"),
-      status: DataTypes.ENUM("approved", "pending", "rejected", "closed"),
-      addressLocation: DataTypes.STRING,
-      addressNumber: DataTypes.INTEGER,
-      addressStreet: DataTypes.STRING,
+      price: Sequelize.DECIMAL,
+      title: Sequelize.STRING,
+      offer_type: Sequelize.ENUM("rent", "sell"),
+      property_type: Sequelize.ENUM("small house", "apartment", "mansion"),
+      status: Sequelize.ENUM("approved", "pending", "rejected", "closed"),
+      address_location: Sequelize.STRING,
+      address_number: Sequelize.INTEGER,
+      address_street: Sequelize.STRING,
       owner_id: {
         allowNull: false,
-        type: Sequelize.DataTypes.UUID,
+        type: Sequelize.Sequelize.UUID,
         references: {
           model: {
             tableName: "Owners",
@@ -25,11 +25,11 @@ module.exports = {
           key: "id",
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },

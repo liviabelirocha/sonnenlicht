@@ -9,20 +9,20 @@ module.exports = {
       },
       name: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
       },
       password: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
       },
       email: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
       },
-      phoneNumber: DataTypes.STRING,
+      phone_number: Sequelize.STRING,
       role_id: {
         allowNull: false,
-        type: Sequelize.DataTypes.UUID,
+        type: Sequelize.Sequelize.UUID,
         references: {
           model: {
             tableName: "Roles",

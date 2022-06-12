@@ -9,6 +9,8 @@ const checkDatabaseConnection = require("./services/checkDatabaseConnection");
 const endpointNotFoundHandler = require("./services/endpointNotFoundHandler");
 const mainErrorHandler = require("./services/mainErrorHandler");
 
+const { userRoute } = require("./routes");
+
 //Routes
 
 (async () => {
@@ -22,6 +24,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(cors());
 
 //App routing
+app.use(userRoute);
 
 //docs
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(ymlfile));

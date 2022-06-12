@@ -7,12 +7,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID,
       },
-      name: { type: DataTypes.STRING, allowNull: false },
-      createdAt: {
+      name: { type: Sequelize.STRING, allowNull: false },
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
