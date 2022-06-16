@@ -1,27 +1,18 @@
-import { sign } from "jsonwebtoken";
-import { accessTokenExpirationTimeInSeconds } from "../configs/jwtConfig";
+const { sign } = require("jsonwebtoken");
+
 require("dotenv").config();
 
-function generateJwt(
-  user_id,
-  user_email,
-  user_document,
-  user_role,
-  user_subroles
-) {
+function generateJwt(user_id, user_email, user_role, user_name) {
   const payload = {
     user: {
       id: user_id,
       email: user_email,
-      document: user_document,
       role: user_role,
-      subroles: user_subroles,
+      name: user_name,
     },
   };
 
-  return sign(payload, process.env.jwtSecret, {
-    expiresIn: accessTokenExpirationTimeInSeconds,
-  });
+  return sign(payload, process.env.jwtSecret);
 }
 
-export default generateJwt;
+module.exports = generateJwt;
