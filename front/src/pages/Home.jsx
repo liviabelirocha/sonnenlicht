@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card } from "../components/Card"
+import Filter from "../components/Filter";
 
 import "../styles/pages/Home.scss"
 
@@ -16,15 +17,15 @@ const Home = ( { houses = [] } ) => {
             newHouses.push({
                 title: "Apartamento em Fortaleza",
                 city: "Fortaleza",
-                details: ["1 cama de casal","30 de out. - 6 de nov."],
-                img: "https://image.shutterstock.com/mosaic_250/565474/1937913955/stock-photo-a-perfect-neighbourhood-houses-in-suburb-at-summer-in-the-north-america-luxury-houses-with-nice-1937913955.jpg",
+                details: ["Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side."],
+                img: "https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096",
                 price: "6.000",
             });
             newHouses.push({
                 title: "Apartamento em São Paulo",
                 city: "São Paulo",
-                details: ["1 cama de casal","30 de out. - 6 de nov."],
-                img: "https://image.shutterstock.com/mosaic_250/565474/1937913955/stock-photo-a-perfect-neighbourhood-houses-in-suburb-at-summer-in-the-north-america-luxury-houses-with-nice-1937913955.jpg",
+                details: ["Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side."],
+                img: "https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096",
                 price: "6.000",
             });
         }
@@ -40,14 +41,16 @@ const Home = ( { houses = [] } ) => {
     
     return (
       <div className="home-layout">
-        <div className="filter">
-          <select className="city" name="city" onChange={(e) => handleChangeCity(e)}>
+        <div className="filter_section">
+        <Filter></Filter>
+          {/* <select className="city" name="city" onChange={(e) => handleChangeCity(e)}>
             <option value="all">Todas</option>
             {options.map((option) => {
               return <option value={option}>{option}</option>;
             })}
-          </select>
+          </select> */}
         </div>
+        <h2 className="content__title-section">Properties</h2>
         <div className="content">
           {filteredHouses.length === 0
             ? ""
