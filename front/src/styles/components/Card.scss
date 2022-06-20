@@ -1,54 +1,54 @@
-@import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
 
-@import "../utils/variables.scss";
+@import '../utils/variables.scss';
 
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-family: Oxygen, sans-serif;
-    margin: 2rem;
+  font-family: Oxygen, sans-serif;
+  margin: 2rem;
 }
 
 .card {
-    overflow: hidden;
-    box-shadow: 1px 1px 20px $clr-neutral-main;
-    border-radius: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 250ms ease-in;
+  overflow: hidden;
+  box-shadow: 1px 1px 20px $clr-neutral-main;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 250ms ease-in;
 
-    &__content {
-        padding: 1rem;
-    }
+  &__content {
+    padding: 1rem;
+  }
 
-    &__image {
-        height: 10rem;
-        width: 100%;
-        object-fit: cover;
-        border-radius: 0.4rem;
-    }
+  &__image {
+    height: 10rem;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.4rem;
+  }
 
-    &__title {
-        margin: 1vh 0 0;
-    }
+  &__title {
+    margin: 1vh 0 0;
+  }
 
-    &__price {
-        color: gray;
-    }
+  &__price {
+    color: gray;
+  }
 
-    &__details {
-        font-size: 0.8rem;
-    }
+  &__details {
+    font-size: 0.8rem;
+  }
 
-    &:hover {
-        transform: scale(1.02);
-        cursor: pointer;
-    }
+  &:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+  }
 }
