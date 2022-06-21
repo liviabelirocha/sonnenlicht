@@ -22,7 +22,7 @@ module.exports = {
       phone_number: Sequelize.STRING,
       role_id: {
         allowNull: false,
-        type: Sequelize.Sequelize.UUID,
+        type: Sequelize.UUID,
         references: {
           model: {
             tableName: "Roles",

@@ -15,6 +15,22 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
         },
       });
+      this.hasOne(models.Admin, {
+        as: "Admin",
+        foreignKey: {
+          name: "user_id",
+          allowNull: false,
+        },
+        onDelete: "CASCADE",
+      });
+      this.hasOne(models.Owner, {
+        as: "Owner",
+        foreignKey: {
+          name: "user_id",
+          allowNull: false,
+        },
+        onDelete: "CASCADE",
+      });
     }
   }
   User.init(
