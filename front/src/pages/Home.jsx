@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Card } from '../components/Card'
 import Filter from '../components/Filter'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
 
 import '../styles/pages/Home.scss'
 
@@ -47,15 +49,17 @@ const Home = ({ houses = [] }) => {
   }
 
   return (
-    <div className="home-layout">
-      <div className="filter_section">
-        <Filter></Filter>
-      </div>
-      <h2 className="content__title-section">Properties</h2>
-      <div className="content">
-        {filteredHouses.length === 0
-          ? ''
-          : filteredHouses.map((house, index) => {
+    <>
+      <Header></Header>
+      <div className="home-layout">
+        <div className="filter_section">
+          <Filter></Filter>
+        </div>
+        <h2 className="content__title-section">Properties</h2>
+        <div className="content">
+          {filteredHouses.length === 0
+            ? ''
+            : filteredHouses.map((house, index) => {
               return (
                 <Card
                   key={`card-${index}`}
@@ -66,8 +70,10 @@ const Home = ({ houses = [] }) => {
                 ></Card>
               )
             })}
+        </div>
       </div>
-    </div>
+      <Footer></Footer>
+    </>
   )
 }
 
