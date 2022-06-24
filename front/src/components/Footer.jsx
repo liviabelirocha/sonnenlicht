@@ -1,4 +1,4 @@
-import { Col, Row, Card, Avatar, Button, Divider } from 'antd'
+import { Col, Row, Avatar, Button } from 'antd'
 import styled, { css } from 'styled-components'
 
 const StyledFooter = styled.div(
@@ -47,10 +47,10 @@ const Footer = () => {
                 <Col span={3}>
                     {isLoggedInMOCK ?
                         <Button type={'primary'} size={'large'}>
-                            <b>Login</b>
+                            <b>Logout</b>
                         </Button> :
                         <Button type={'primary'} size={'large'}>
-                            <b>Logout</b>
+                            <b>Login</b>
                         </Button>
                     }
                 </Col>

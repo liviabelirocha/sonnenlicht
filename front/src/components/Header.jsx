@@ -5,9 +5,11 @@ import styled, { css } from 'styled-components'
 
 const StyledHeader = styled.div(
     () => css`
+        background: #FEFDF9;
+        box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
+        border-radius: 0px 0px 25px 25px;
         padding: 20px 10vw;
-        background-color: white;
-        
+
         .controls {
             .ant-btn {
                 border-color: transparent;
@@ -55,10 +57,10 @@ const Header = () => {
                 </Col>
                 {isLoggedInMOCK ?
                     <Button type={'primary'}>
-                        <b>Login</b>
+                        <b>Logout</b>
                     </Button> :
                     <Button type={'primary'}>
-                        <b>Logout</b>
+                        <b>Login</b>
                     </Button>
                 }
             </Row>
