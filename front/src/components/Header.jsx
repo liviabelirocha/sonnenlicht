@@ -12,7 +12,9 @@ const StyledHeader = styled.div(
 
         .controls {
             .ant-btn {
+                background-color: transparent;
                 border-color: transparent;
+                box-shadow: none;
             }
 
             .ant-btn-primary {

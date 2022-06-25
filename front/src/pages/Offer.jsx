@@ -1,8 +1,11 @@
 import { Col, Row, Card, Avatar, Button } from 'antd'
-import { CompassFilled } from '@ant-design/icons'
+import { CheckOutlined, CloseOutlined, CompassFilled } from '@ant-design/icons'
 import { useParams } from 'react-router-dom'
 
 import styled, { css } from 'styled-components'
+
+export const defaultBackground =
+  'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096'
 
 const renderStatus = (status, options) => {
   return status === 'normal'
@@ -24,10 +27,11 @@ const makeOptions = (normal, approved, reproved, pending) => ({
 })
 
 const StyledOffer = styled.section(
-  ({ status }) =>
+  ({ status, backgroundImage }) =>
     css`
       display: block;
       position: relative;
+      max-height: 100vh;
 
       > div {
         width: 100%;
@@ -43,7 +47,7 @@ const StyledOffer = styled.section(
           margin: 0 0 13vh 3vw;
           justify-content: center;
           color: white;
-          font-size: 2rem;
+          font-size: 1.5rem;
           font-weight: 600;
           background-color: #fa7456;
           border-radius: 50px;
@@ -61,7 +65,9 @@ const StyledOffer = styled.section(
 
       > div:first-child {
         height: 50vh;
-        background: url(https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096);
+        background: url(${backgroundImage
+          ? backgroundImage
+          : defaultBackground});
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center center;
@@ -75,25 +81,48 @@ const StyledOffer = styled.section(
         margin-top: -10vh;
         background-color: #fefdf9;
 
-        .middle__header {
-          display: block;
+        .middle_header {
+          display: flex;
+          justify-content: space-between;
 
-          > span {
-            font-size: 1.5rem;
-          }
-
-          > div {
-            align-items: center;
-            display: flex;
+          .name_location {
+            display: block;
 
             > span {
-              font-size: 1.2rem;
+              font-size: 1.5rem;
             }
 
             > div {
-              color: gray;
-              margin-left: 0.5vw;
-              font-size: 1.5rem;
+              align-items: center;
+              display: flex;
+
+              > span {
+                font-size: 1.2rem;
+              }
+
+              > div {
+                color: gray;
+                margin-left: 0.5vw;
+                font-size: 1.5rem;
+              }
+            }
+          }
+
+          .validation__container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-right: 5vw;
+            width: 15vw;
+
+            .ant-btn:first-child {
+              border: none;
+              background: #00c750;
+            }
+
+            .ant-btn:nth-child(2) {
+              border: none;
+              background: #fa7456;
             }
           }
         }
@@ -201,41 +230,73 @@ const StyledLowerBarStatus = styled.div(
   `
 )
 
+const MOCK_DEFAULT_DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Faucibus
+velit, enim facilisi pulvinar velit id. Orci mauris sed vel
+blandit diam non sem felis. Id integer odio nam id nisi facilisi
+leo, egestas nam. Lorem ipsum dolor sit amet,`
+
 const MOCK_REPROVED_DESCRIPTION = `Big description of why it was removed Big description of why it was
 removed Big description of why it was removed Big description of why
 it was removed Big description of why it was removed`
 
-const LowerBarStatus = ({ status, statusName, description = MOCK_REPROVED_DESCRIPTION }) => {
+const LowerBarStatus = ({
+  status,
+  statusName,
+  description = MOCK_REPROVED_DESCRIPTION,
+}) => {
   return (
     <StyledLowerBarStatus status={status} span={24}>
       {statusName}
-      {status === 'reproved' && (
-        <p>
-          {description}
-        </p>
-      )}
+      {status === 'reproved' && <p>{description}</p>}
     </StyledLowerBarStatus>
   )
 }
 
-const Offer = ({ preco = '$ 200.000', status = 'reproved' }) => {
+const Offer = ({
+  price = '$ 200.000',
+  title = 'Family size House',
+  description = MOCK_DEFAULT_DESCRIPTION,
+  status = 'reproved',
+  adminValidation = false,
+}) => {
   const params = useParams()
+
   return (
     <StyledOffer status={status}>
       <Row>
         <div className="price">
-          <span>{preco}</span>
+          <span>{price}</span>
         </div>
       </Row>
       <Row>
-        <Row className="middle__header">
-          <span>
-            <b>Family size House</b>
-          </span>
-          <div>
-            <CompassFilled />
-            <div>Berlin</div>
-          </div>
+        <Row className="middle_header">
+          <Col>
+            <div className="name_location">
+              <span>
+                <b>{title}</b>
+              </span>
+              <div>
+                <CompassFilled />
+                <div>Berlin</div>
+              </div>
+            </div>
+          </Col>
+          {adminValidation && (
+            <div className="validation__container">
+              <Button
+                type="primary"
+                shape="round"
+                icon={<CheckOutlined />}
+                size={'large'}
+              />
+              <Button
+                type="primary"
+                shape="round"
+                icon={<CloseOutlined />}
+                size={'large'}
+              />
+            </div>
+          )}
         </Row>
         <Row className="middle__content">
           <Col span={12}>
@@ -245,12 +306,7 @@ const Offer = ({ preco = '$ 200.000', status = 'reproved' }) => {
           </Col>
           <Col span={11}>
             <h1>Description</h1>
-            <span>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Faucibus
-              velit, enim facilisi pulvinar velit id. Orci mauris sed vel
-              blandit diam non sem felis. Id integer odio nam id nisi facilisi
-              leo, egestas nam. Lorem ipsum dolor sit amet,
-            </span>
+            <span>{description}</span>
           </Col>
         </Row>
       </Row>

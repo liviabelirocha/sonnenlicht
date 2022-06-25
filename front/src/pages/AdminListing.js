@@ -1,39 +1,16 @@
-import { Col, Row } from 'antd'
-import Modal from 'antd/lib/modal/Modal'
 import { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
 import { Card } from '../components/Card'
 import Filter from '../components/Filter'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 
 import '../styles/pages/Home.scss'
-import Offer from './Offer'
 
-const cardItems = [
-  {
-    title: 'title1',
-    details: 'description1',
-    img: 'img1',
-    price: 'price1',
-  },
-  {
-    title: 'title2',
-    details: 'description2',
-    img: 'img2',
-    price: 'price2',
-  },
-]
-
-const Home = ({ houses = [] }) => {
+const AdminListing = ({ houses = [] }) => {
   const [filteredHouses, setFilteredHouses] = useState(houses)
   const [originalHouses, setOriginalHouses] = useState(houses)
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  
   const options = ['Fortaleza', 'São Paulo']
-  
-  const [currentOffer, setCurrentOffer] = useState(cardItems[0])
 
   useEffect(() => {
     const newHouses = []
@@ -71,13 +48,6 @@ const Home = ({ houses = [] }) => {
     )
   }
 
-  const handleCardClick = (e) => {
-    console.log(e)
-    setIsModalOpen((curr) => !curr)
-  }
-
-  const StyledModal = styled.div(() => css``)
-
   return (
     <>
       <Header></Header>
@@ -90,35 +60,22 @@ const Home = ({ houses = [] }) => {
           {filteredHouses.length === 0
             ? ''
             : filteredHouses.map((house, index) => {
-                return (
-                  <Card
-                    key={`card-${index}`}
-                    title={house.title}
-                    details={house.details}
-                    img={house.img}
-                    price={house.price}
-                    handleClick={handleCardClick}
-                  ></Card>
-                )
-              })}
+              return (
+                <Card
+                  key={`card-${index}`}
+                  title={house.title}
+                  details={house.details}
+                  img={house.img}
+                  price={house.price}
+                  status='success'
+                ></Card>
+              )
+            })}
         </div>
       </div>
-      <StyledModal>
-        <Modal
-          title="Offer #X"
-          visible={isModalOpen}
-          onCancel={handleCardClick}
-          footer={null}
-          width="80vw"
-        >
-          <Col style={{ height: '70vh', width: '100vw' }}>
-            <Offer {...currentOffer}></Offer>
-          </Col>
-        </Modal>
-      </StyledModal>
       <Footer></Footer>
     </>
   )
 }
 
-export { Home }
+export { AdminListing }

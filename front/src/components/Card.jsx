@@ -18,9 +18,9 @@ const StyledStatus = styled.div(
   `
 )
 
-const Card = ({ title, details, img, price, status = '' }) => {
+const Card = ({ title, details, img, price, handleClick = () => {}, status = '' }) => {
   return (
-    <div className="card">
+    <div className="card" onClick={handleClick}>
       <div className="card__content">
         <img src={img} className="card__image" alt="img" />
         <Row className="card__header">
