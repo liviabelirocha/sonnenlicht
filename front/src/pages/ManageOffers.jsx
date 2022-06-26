@@ -1,6 +1,7 @@
 import { Col, Modal, Table } from 'antd'
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
+import DashboardNumbers from '../components/DashboardNumbers'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Offer from './Offer'
@@ -118,14 +119,14 @@ const ManageOffers = () => {
   const StyledTable = styled.div(
     () => css`
       display: block;
-      margin: 10vh 5vw 0;
-      min-height: 50vh;
+      margin: 0 5vw 0;
     `
   )
 
   return (
     <>
       <Header></Header>
+      <DashboardNumbers pending_reviews={69} houses_available={420} />
       <StyledTable>
         <Table
           columns={columns}
