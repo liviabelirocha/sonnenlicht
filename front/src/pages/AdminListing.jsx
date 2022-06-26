@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import styled, { css } from 'styled-components'
 import { Card } from '../components/Card'
 import Filter from '../components/Filter'
 import Footer from '../components/Footer'
@@ -48,9 +49,66 @@ const AdminListing = ({ houses = [] }) => {
     )
   }
 
+  const StyledDashboardNumbers = styled.div(
+    () => css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      > div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 50vw;
+        margin: 10vh 0 5vh;
+        padding-left: 4vw;
+  
+        border: 2px solid black;
+        border-radius: 30px;
+  
+        .pending_reviews {
+          display: flex;
+          flex-direction: column;
+          margin: 3vh;
+          font-size: 2.5rem;
+          font-weight: 600;
+        }
+  
+        .houses_available {
+          display: flex;
+          flex-direction: column;
+          margin: 2vh;
+          color: gray;
+          font-size: 1.8rem;
+          font-weight: 600;
+        }
+      }
+    `
+  )
+  
+  const StyledNumber = styled.span(
+    ({ color }) => css`
+      color: ${color};
+    `
+  )
+
   return (
     <>
       <Header></Header>
+      <StyledDashboardNumbers>
+      <div>
+        <div className="pending_reviews">
+          <span>
+            You have <StyledNumber color="#fa7456">69</StyledNumber>
+          </span>
+          <span>pending reviews</span>
+        </div>
+        <div className="houses_available">
+          <span>You have <StyledNumber color="green">420</StyledNumber></span>
+          <span>houses available</span>
+        </div>
+      </div>
+    </StyledDashboardNumbers>
       <div className="home-layout">
         <div className="filter_section">
           <Filter></Filter>

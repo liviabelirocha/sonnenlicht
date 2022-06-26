@@ -40,14 +40,14 @@ const StyledOffer = styled.section(
 
         .price {
           display: flex;
-          min-width: 20vw;
+          min-width: 10vw;
           width: auto;
-          height: 7vh;
+          height: 5vh;
           align-items: center;
           margin: 0 0 13vh 3vw;
           justify-content: center;
           color: white;
-          font-size: 1.5rem;
+          font-size: 1.2rem;
           font-weight: 600;
           background-color: #fa7456;
           border-radius: 50px;
@@ -64,7 +64,7 @@ const StyledOffer = styled.section(
       }
 
       > div:first-child {
-        height: 50vh;
+        height: 40vh;
         background: url(${backgroundImage
           ? backgroundImage
           : defaultBackground});
@@ -77,7 +77,7 @@ const StyledOffer = styled.section(
         display: block;
         padding: 3vh 0 0 2vw;
 
-        height: 60vh;
+        height: 40vh;
         margin-top: -10vh;
         background-color: #fefdf9;
 
@@ -128,7 +128,7 @@ const StyledOffer = styled.section(
         }
 
         .middle__content {
-          margin-top: 5vh;
+          margin-top: 2vh;
           max-height: 15vh;
 
           > div:first-child {
@@ -152,8 +152,8 @@ const StyledOffer = styled.section(
 
       > div:nth-child(3) {
         z-index: 1;
-        height: 20vh;
-        margin-top: 30vh;
+        height: 15vh;
+        margin-top: 25vh;
         background-color: ${renderStatus(
           status,
           makeOptions('#fa7456', '#008937', '#9F3000', '#FA7456')
@@ -189,6 +189,18 @@ const StyledOffer = styled.section(
     `
 )
 
+const StyledButton = styled.div(
+  () => css`
+    .ant-btn {
+      color: #fa7456;
+
+      &:hover {
+        border-color: #fa7456;
+      }
+    }
+  `
+)
+
 const LowerBarOwner = () => {
   return (
     <>
@@ -204,11 +216,11 @@ const LowerBarOwner = () => {
           <p>Property Owner</p>
         </div>
       </Col>
-      <div>
+      <StyledButton>
         <Button size="large">
           <b>Contact</b>
         </Button>
-      </div>
+      </StyledButton>
     </>
   )
 }
@@ -220,24 +232,22 @@ const StyledLowerBarStatus = styled.div(
     justify-content: ${status !== 'reproved' ? 'center' : 'space-evenly'};
     align-items: center;
     color: white;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 600;
 
-    > p {
+    > span {
       max-width: 40vw;
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
   `
 )
 
 const MOCK_DEFAULT_DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Faucibus
 velit, enim facilisi pulvinar velit id. Orci mauris sed vel
-blandit diam non sem felis. Id integer odio nam id nisi facilisi
-leo, egestas nam. Lorem ipsum dolor sit amet,`
+blandit diam . `
 
 const MOCK_REPROVED_DESCRIPTION = `Big description of why it was removed Big description of why it was
-removed Big description of why it was removed Big description of why
-it was removed Big description of why it was removed`
+removed Big description of why it was removed`
 
 const LowerBarStatus = ({
   status,
@@ -247,7 +257,7 @@ const LowerBarStatus = ({
   return (
     <StyledLowerBarStatus status={status} span={24}>
       {statusName}
-      {status === 'reproved' && <p>{description}</p>}
+      {status === 'reproved' && <span>{description}</span>}
     </StyledLowerBarStatus>
   )
 }
@@ -256,7 +266,7 @@ const Offer = ({
   price = '$ 200.000',
   title = 'Family size House',
   description = MOCK_DEFAULT_DESCRIPTION,
-  status = 'reproved',
+  status = 'normal',
   adminValidation = false,
 }) => {
   const params = useParams()

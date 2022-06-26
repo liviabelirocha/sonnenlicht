@@ -1,5 +1,7 @@
+import styled, { css } from 'styled-components'
+
 const Admin = () => {
-    return <h1>Admin</h1>
+  return <></>
 }
 
 export { Admin }

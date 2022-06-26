@@ -18,7 +18,14 @@ const StyledStatus = styled.div(
   `
 )
 
-const Card = ({ title, details, img, price, handleClick = () => {}, status = '' }) => {
+const Card = ({
+  title,
+  details,
+  img,
+  price,
+  handleClick = () => {},
+  status = '',
+}) => {
   return (
     <div className="card" onClick={handleClick}>
       <div className="card__content">

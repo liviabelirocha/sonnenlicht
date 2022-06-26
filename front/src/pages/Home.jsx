@@ -15,13 +15,15 @@ const cardItems = [
     title: 'title1',
     details: 'description1',
     img: 'img1',
-    price: 'price1',
+    price: '$ 500.000',
+    status: 'approved',
   },
   {
     title: 'title2',
     details: 'description2',
     img: 'img2',
     price: 'price2',
+    status: 'reproved',
   },
 ]
 
@@ -30,9 +32,9 @@ const Home = ({ houses = [] }) => {
   const [originalHouses, setOriginalHouses] = useState(houses)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  
+
   const options = ['Fortaleza', 'São Paulo']
-  
+
   const [currentOffer, setCurrentOffer] = useState(cardItems[0])
 
   useEffect(() => {
@@ -71,8 +73,7 @@ const Home = ({ houses = [] }) => {
     )
   }
 
-  const handleCardClick = (e) => {
-    console.log(e)
+  const handleCardClick = () => {
     setIsModalOpen((curr) => !curr)
   }
 
@@ -103,19 +104,20 @@ const Home = ({ houses = [] }) => {
               })}
         </div>
       </div>
-      <StyledModal>
-        <Modal
-          title="Offer #X"
-          visible={isModalOpen}
-          onCancel={handleCardClick}
-          footer={null}
-          width="80vw"
-        >
-          <Col style={{ height: '70vh', width: '100vw' }}>
-            <Offer {...currentOffer}></Offer>
-          </Col>
-        </Modal>
-      </StyledModal>
+      <Modal
+        title="Oferta"
+        style={{
+          top: 10,
+        }}
+        visible={isModalOpen}
+        onCancel={handleCardClick}
+        footer={null}
+        width="80vw"
+      >
+        <Col style={{ height: '80vh', width: '100vw' }}>
+          <Offer {...currentOffer}></Offer>
+        </Col>
+      </Modal>
       <Footer></Footer>
     </>
   )
