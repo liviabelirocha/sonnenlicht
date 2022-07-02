@@ -1,8 +1,36 @@
 import React, { useState } from "react";
+import styled, { css } from 'styled-components'
 import { Button, Steps } from "antd";
 
 const StepPanel = (props) => {
   const [activeStep, setActiveStep] = useState(0);
+
+  const StyledContainer = styled.div(
+    () => css`
+      display: flex;
+      flex-direction:column;
+      justify-content: flex-end;
+  
+      width: 50vw;
+      margin-top: 5vh;
+
+      .steps-header {
+        margin-bottom: 24px;
+      }
+
+      .steps-content {
+        margin-top: 2vh;
+      }
+
+      .steps-action {
+        align-self: flex-end;
+      }
+
+      .hidden {
+        display: none;
+      }
+    `
+  )
 
   function next() {
     const nextStep = activeStep + 1;
@@ -15,8 +43,8 @@ const StepPanel = (props) => {
   }
 
   return (
-    <>
-      <Steps current={activeStep} style={{ width: 400 }}>
+    <StyledContainer className='step-panel-styled'>
+      <Steps className="steps-header" current={activeStep}>
         {props.steps.map((item) => (
           <Steps.Step key={item.title} title={item.title} />
         ))}
@@ -31,6 +59,11 @@ const StepPanel = (props) => {
         </div>
       ))}
       <div className="steps-action">
+        {activeStep > 0 && (
+          <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
+            Previous
+          </Button>
+        )}
         {activeStep < props.steps.length - 1 && (
           <Button type="primary" onClick={() => next()}>
             Next
@@ -41,13 +74,8 @@ const StepPanel = (props) => {
             Submit
           </Button>
         )}
-        {activeStep > 0 && (
-          <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
-            Previous
-          </Button>
-        )}
       </div>
-    </>
+    </StyledContainer>
   );
 };
 
