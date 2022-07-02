@@ -2,8 +2,22 @@ import { Table } from 'antd'
 import styled, { css } from 'styled-components'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import useToken from '../hooks/useToken'
+import SignIn from './SignIn'
+
+const StyledTable = styled.div(
+  () => css`
+    display: block;
+    margin: 10vh 5vw 0;
+    min-height: 50vh;
+  `
+)
 
 const ManageUsers = () => {
+  const { token } = useToken()
+  if(!token) {
+    return <SignIn />
+  }
   const users = [
     {
       name: 'John Brown',
@@ -75,14 +89,6 @@ const ManageUsers = () => {
     address: `${user.address}`,
     action: `${user.action}`,
   }))
-
-  const StyledTable = styled.div(
-    () => css`
-      display: block;
-      margin: 10vh 5vw 0;
-      min-height: 50vh;
-    `
-  )
 
   return (
     <>

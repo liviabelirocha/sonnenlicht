@@ -5,8 +5,10 @@ import DashboardNumbers from '../components/DashboardNumbers'
 import Filter from '../components/Filter'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import useToken from '../hooks/useToken'
 
 import '../styles/pages/Home.scss'
+import SignIn from './SignIn'
 
 const AdminListing = ({ houses = [] }) => {
   const [filteredHouses, setFilteredHouses] = useState(houses)
@@ -39,6 +41,11 @@ const AdminListing = ({ houses = [] }) => {
     setOriginalHouses(newHouses)
     setFilteredHouses(newHouses)
   }, [])
+
+  const { token } = useToken()
+  if(!token) {
+    return <SignIn />
+  }
 
   const handleChangeCity = (e) => {
     const newCity = e.target.value

@@ -1,10 +1,7 @@
-import { Button, Select } from 'antd'
-import { useEffect } from 'react'
+import { Button } from 'antd'
 import { useState } from 'react'
 import '../styles/components/Filter.scss'
 import FilterSelect from './FilterSelect'
-
-const { Option } = Select
 
 const offerTypeOptions = ['Rent', 'Buy']
 const locationOptions = ['Fortaleza', 'São Paulo']

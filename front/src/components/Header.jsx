@@ -1,4 +1,5 @@
 import { Col, Row, Avatar, Button } from 'antd'
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components'
 
 
@@ -27,7 +28,8 @@ const StyledHeader = styled.div(
 )
 
 const Header = () => {
-    const isLoggedInMOCK = false;
+    const isLogged = sessionStorage.getItem('token');
+    const navigate = useNavigate();
     return (
         <StyledHeader>
             <Row justify='space-between'>
@@ -57,11 +59,11 @@ const Header = () => {
                         </Col>
                     </Row>
                 </Col>
-                {isLoggedInMOCK ?
+                {isLogged ?
                     <Button type={'primary'}>
                         <b>Logout</b>
                     </Button> :
-                    <Button type={'primary'}>
+                    <Button type={'primary'} onClick={() => navigate("/signin")}>
                         <b>Login</b>
                     </Button>
                 }

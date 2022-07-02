@@ -1,7 +1,13 @@
-import styled, { css } from 'styled-components'
+import { useLocation } from "react-router-dom";
+import useToken from "../hooks/useToken";
+import SignIn from "./SignIn";
 
 const Admin = () => {
-  return <></>
+  const { token } = useToken()
+  if(!token) {
+    return <SignIn />
+  }
+  return <h1>Admin</h1>
 }
 
 export { Admin }
