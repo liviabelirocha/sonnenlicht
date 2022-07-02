@@ -1,28 +1,30 @@
-@import "../utils/variables.scss"; 
+@import '../utils/variables.scss';
 
 .home-layout {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.filter {
-    margin-bottom: 5vh;
-    display: flex;
-    justify-content: center;
+.filter_section {
+  margin: 5vh 0;
 
-    .city {
-        background-color: transparent;
-        color: $clr-neutral-darkest;
-        border-radius: 0.2rem;
-        height: 5vh;
-        width: 50%;
-    }
+  .city {
+    background-color: transparent;
+    color: $clr-neutral-darkest;
+    border-radius: 0.2rem;
+    height: 5vh;
+    width: 50%;
+  }
 }
 
 .content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 16rem));
-    gap: 2rem;
-    justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 18rem));
+  gap: 4rem;
+  justify-content: center;
+
+  &__title-section {
+    margin: 0 0 5vh 3vw;
+  }
 }

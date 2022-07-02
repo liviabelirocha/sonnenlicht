@@ -1,0 +1,18 @@
+.filter {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5rem, 8rem));
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-select-selector {
+  border: none !important;
+  padding: 0 !important;
+}
+
+.search_button {
+  color: white;
+  border-radius: 50px;
+  background-color: black;
+}

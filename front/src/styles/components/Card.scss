@@ -1,92 +1,54 @@
-@import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
 
-@import "../utils/variables.scss";
-
-$radius: 0.2rem;
+@import '../utils/variables.scss';
 
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-family: Oxygen, sans-serif;
-    margin: 2rem;
+  font-family: Oxygen, sans-serif;
+  margin: 2rem;
 }
 
 .card {
-    overflow: hidden;
-    box-shadow: 1px 1px 20px $clr-neutral-main;
-    border-radius: $radius;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 250ms ease-in;
+  overflow: hidden;
+  box-shadow: 1px 1px 20px $clr-neutral-main;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 250ms ease-in;
 
-    &__image {
-        height: 10rem;
-        width: 100%;
-        object-fit: cover;
-    }
+  &__content {
+    padding: 1rem;
+  }
 
-    &__title {
-        padding-bottom: 1rem;
-    }
+  &__image {
+    height: 10rem;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.4rem;
+  }
 
-    &__details {
-        padding: 1rem;
-    }
+  &__title {
+    margin: 1vh 0 0;
+  }
 
-    &__btn-container {
-        display: flex;
-        flex-direction: column;
-        min-height: 20vh;
-        justify-content: space-around;
-        margin-bottom: 1rem;
-    }
+  &__price {
+    color: gray;
+  }
 
-    &__btn {
-        padding: 1rem;
-        font-family: inherit;
-        font-weight: bold;
-        font-size: 1rem;
-        margin: 0 1.5rem;
-        background: transparent;
-        border-radius: $radius;
-        transition: background 200ms ease-in, color 200ms ease-in;
-    }
+  &__details {
+    font-size: 0.8rem;
+  }
 
-    &__price {
-        margin-top: 0.5rem;
-    }
-
-    &:hover {
-        transform: scale(1.02);
-    }
-}
-
-.more-info {
-    border: 2px solid $clr-primary;
-    color: $clr-primary;
-}
-
-.more-info:hover {
+  &:hover {
+    transform: scale(1.02);
     cursor: pointer;
-    background: $clr-primary;
-    color: white;
-}
-
-.contact {
-    border: 2px solid $clr-neutral-darkest;
-    background-color: transparent;
-    color: $clr-neutral-darkest;
-}
-
-.contact:hover {
-    cursor: pointer;
-    background: $clr-neutral-darkest;
-    color: $clr-neutral-lightest;
+  }
 }
