@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Admin } from "./pages/Admin";
 import { AdminListing } from "./pages/AdminListing";
+import CreateOffer from "./pages/CreateOffer";
 import { Home } from "./pages/Home";
 
 import { LandingPage } from "./pages/LandingPage";
@@ -23,6 +24,7 @@ const Router = () => {
         <Route path="/landing-page" element={<LandingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/create-offer" element={<CreateOffer />} />
       </Routes>
     </BrowserRouter>
   );
