@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd'
+import { Col } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
