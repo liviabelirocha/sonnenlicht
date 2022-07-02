@@ -1,4 +1,5 @@
 import { Col, Row, Avatar, Button } from 'antd'
+import { useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 const StyledFooter = styled.div(
@@ -12,8 +13,13 @@ const StyledFooter = styled.div(
     `
 )
 
+const logout = () => {
+    sessionStorage.removeItem('token')
+}
+
 const Footer = () => {
-    const isLoggedInMOCK = false;
+    const isLogged = sessionStorage.getItem('token');
+    const navigate = useNavigate();
     return (
         <StyledFooter>
             <Row justify={"space-between"} align={"middle"}>
@@ -45,11 +51,11 @@ const Footer = () => {
                     </Row>
                 </Col>
                 <Col span={3}>
-                    {isLoggedInMOCK ?
-                        <Button type={'primary'} size={'large'}>
+                    {isLogged ?
+                        <Button type={'primary'} size={'large'} onClick={logout}>
                             <b>Logout</b>
                         </Button> :
-                        <Button type={'primary'} size={'large'}>
+                        <Button type={'primary'} size={'large'} onClick={() => navigate("/signin")}>
                             <b>Login</b>
                         </Button>
                     }

@@ -4,7 +4,16 @@ import styled, { css } from 'styled-components'
 import DashboardNumbers from '../components/DashboardNumbers'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import useToken from '../hooks/useToken'
 import Offer from './Offer'
+import SignIn from './SignIn'
+
+const StyledTable = styled.div(
+  () => css`
+    display: block;
+    margin: 0 5vw 0;
+  `
+)
 
 const offers = [
   {
@@ -37,6 +46,11 @@ const ManageOffers = () => {
   const [currentOffer, setCurrentOffer] = useState(offers[0])
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const { token } = useToken()
+  if(!token) {
+    return <SignIn />
+  }
 
   const handleCardClick = () => {
     setIsModalOpen((curr) => !curr)
@@ -115,13 +129,6 @@ const ManageOffers = () => {
     street: `${offer.street}`,
     price: `${offer.price}`,
   }))
-
-  const StyledTable = styled.div(
-    () => css`
-      display: block;
-      margin: 0 5vw 0;
-    `
-  )
 
   return (
     <>
