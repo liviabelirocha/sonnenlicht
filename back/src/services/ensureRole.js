@@ -15,7 +15,7 @@ const is = (roles) => {
 
     if (!userHasRole) return res.status(403).end();
 
-    return next();
+    next();
   };
 };
 
