@@ -88,18 +88,36 @@ module.exports = {
       addressStreet,
     } = req.body;
 
-    const offer = await db.Offer.create({
-      id: UUIDV4(),
-      price: price,
-      title: title,
-      offer_type: offerType,
-      property_type: propertyType,
-      address_location: addressLocation,
-      address_number: addressNumber,
-      address_street: addressStreet,
-      status: "pending",
-    });
+    const ownerUserId = req.user_id;
 
-    return res.json(200).json(offer);
+    try {
+      const owner = await db.Owner.findOne({
+        where: { user_id: ownerUserId },
+      });
+
+      const offer = await db.Offer.create({
+        id: UUIDV4(),
+        price: price,
+        title: title,
+        offer_type: offerType,
+        property_type: propertyType,
+        address_location: addressLocation,
+        address_number: addressNumber,
+        address_street: addressStreet,
+        status: "pending",
+        owner_id: owner.id,
+      });
+
+      return res.json(200).json(offer);
+    } catch (err) {
+      return next(
+        new HttpError(
+          402,
+          err.message
+            ? err.message
+            : "There was a problem in creating the offer."
+        )
+      );
+    }
   },
 };
