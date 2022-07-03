@@ -25,16 +25,43 @@ module.exports = {
     const salt = await genSalt(saltRound);
     const bcryptedPassword = await hash(password, salt);
 
-    const user = await db.User.create({
-      id: UUIDV4(),
-      name,
-      password: bcryptedPassword,
-      email,
-      phone_number,
-      role_id: roleExists.id,
-    });
+    const transaction = await db.sequelize.transaction();
 
-    return res.status(201).json(user);
+    try {
+      const user = await db.User.create(
+        {
+          id: UUIDV4(),
+          name,
+          password: bcryptedPassword,
+          email,
+          phone_number,
+          role_id: roleExists.id,
+        },
+        { transaction }
+      );
+
+      await db[`${roleExists.name}`].create(
+        {
+          user_id: user.id,
+        },
+        { transaction }
+      );
+
+      await transaction.commit();
+
+      return res.status(201).json(user);
+    } catch (err) {
+      await transaction.rollback();
+
+      return next(
+        new HttpError(
+          err.statusCode ? err.statusCode : 402,
+          err.message
+            ? err.message
+            : "Failed to create user with the given credentials"
+        )
+      );
+    }
   },
 
   async auth(req, res, next) {
