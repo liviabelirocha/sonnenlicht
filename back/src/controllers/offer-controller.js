@@ -29,7 +29,7 @@ module.exports = {
 
     const offer = await db.Offer.findOne({ where: { id } });
 
-    return res.status(200).json(offer.Owner)
+    return res.status(200).json(offer.Owner);
   },
 
   async approve(req, res, next) {
@@ -41,7 +41,7 @@ module.exports = {
 
     const offerUpdated = await db.Offer.update(
       { status: "approved" },
-      { where: { id } },
+      { where: { id } }
     );
 
     return res.status(200).json(offerUpdated);
@@ -56,7 +56,7 @@ module.exports = {
 
     const offerUpdated = await db.Offer.update(
       { status: "rejected" },
-      { where: { id } },
+      { where: { id } }
     );
 
     return res.status(200).json(offerUpdated);
@@ -71,7 +71,7 @@ module.exports = {
 
     const offerUpdated = await db.Offer.update(
       { status: "pending" },
-      { where: { id } },
+      { where: { id } }
     );
 
     return res.status(200).json(offerUpdated);
@@ -85,10 +85,10 @@ module.exports = {
       propertyType,
       addressLocation,
       addressNumber,
-      addressStreet
+      addressStreet,
     } = req.body;
 
-    const offer = db.Offer.create({
+    const offer = await db.Offer.create({
       id: UUIDV4(),
       price: price,
       title: title,
@@ -98,8 +98,8 @@ module.exports = {
       address_number: addressNumber,
       address_street: addressStreet,
       status: "pending",
-    })
+    });
 
-    return res.json(200).json(offer)
+    return res.json(200).json(offer);
   },
 };
