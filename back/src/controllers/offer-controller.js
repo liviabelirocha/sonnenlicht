@@ -87,9 +87,9 @@ module.exports = {
       addressNumber,
       addressStreet,
       description,
-      bedroom_quantity,
-      bathroom_quantity,
-      parking_slot_quantity,
+      bedroomQuantity,
+      bathroomQuantity,
+      parkingSlotQuantity,
       area,
     } = req.body;
 
@@ -114,9 +114,9 @@ module.exports = {
         status: "pending",
         owner_id: owner.id,
         description,
-        bedroom_quantity,
-        bathroom_quantity,
-        parking_slot_quantity,
+        bedroom_quantity: bedroomQuantity,
+        bathroom_quantity: bathroomQuantity,
+        parking_slot_quantity: parkingSlotQuantity,
         area,
       });
 
