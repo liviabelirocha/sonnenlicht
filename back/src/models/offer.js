@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
       address_location: DataTypes.STRING,
       address_number: DataTypes.INTEGER,
       address_street: DataTypes.STRING,
+      description: { type: DataTypes.TEXT, allowNull: true },
+      bedroom_quantity: { type: Datatypes.INTEGER, allowNull: false },
+      bathroom_quantity: { type: Datatypes.INTEGER, allowNull: false },
+      parking_slot_quantity: { type: Datatypes.INTEGER, allowNull: false },
+      area: { type: DataTypes.DECIMAL, allowNull: false },
     },
     {
       sequelize,
