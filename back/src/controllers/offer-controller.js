@@ -110,7 +110,7 @@ module.exports = {
         owner_id: owner.id,
       });
 
-      return res.json(200).json(offer);
+      return res.status(200).json(offer);
     } catch (err) {
       return next(
         new HttpError(
