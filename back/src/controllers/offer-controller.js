@@ -95,6 +95,8 @@ module.exports = {
         where: { user_id: ownerUserId },
       });
 
+      if (!owner) throw new HttpError(403, "Owner not found");
+
       const offer = await db.Offer.create({
         id: UUIDV4(),
         price: price,
@@ -112,7 +114,7 @@ module.exports = {
     } catch (err) {
       return next(
         new HttpError(
-          402,
+          err.statusCode ? err.statusCode : 402,
           err.message
             ? err.message
             : "There was a problem in creating the offer."
