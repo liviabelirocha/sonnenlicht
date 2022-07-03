@@ -42,6 +42,7 @@ module.exports = {
 
       await db[`${roleExists.name}`].create(
         {
+          id: UUIDV4(),
           user_id: user.id,
         },
         { transaction }
