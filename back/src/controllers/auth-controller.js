@@ -71,7 +71,7 @@ module.exports = {
     if (!email || !password)
       return next(new HttpError(402, "Wrong email/password"));
 
-    const user = await db.User.findOne({ where: { email } });
+    const user = await db.User.findOne({ where: { email }, include: ["Role"] });
 
     if (!user) return next(new HttpError(401, "Wrong email/password"));
 
@@ -81,7 +81,7 @@ module.exports = {
 
     const token = generateJwt(user.id, user.email, user.role, user.name);
 
-    return res.status(200).json(token);
+    return res.status(200).json({ token, role: user.Role.name, id: user.id });
   },
 
   async reset(req, res) {
