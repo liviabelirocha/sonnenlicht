@@ -15,7 +15,11 @@ module.exports = {
     if (userAlreadyExists)
       return next(new HttpError(400, "User already exists"));
 
-    const roleId = await db.Role.findOne({ where: { name: role } });
+    const roleExists = await db.Role.findOne({ where: { name: role } });
+
+    if (!roleExists) {
+      return next(new HttpError(402, "Invalid role"));
+    }
 
     const saltRound = 10;
     const salt = await genSalt(saltRound);
@@ -27,7 +31,7 @@ module.exports = {
       password: bcryptedPassword,
       email,
       phone_number,
-      role_id: roleId.id,
+      role_id: roleExists.id,
     });
 
     return res.status(201).json(user);

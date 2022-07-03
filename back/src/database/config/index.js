@@ -19,10 +19,10 @@ const PROD = {
   //Connects to Production DATABASE_URL via models/index.js
   use_env_variable: "DATABASE_URL",
   dialectOptions: {
-    // ssl: {
-    //   require: true,
-    //   rejectUnauthorized: false,
-    // },
+    ssl: {
+      require: false,
+      rejectUnauthorized: false,
+    },
   },
   define: {
     timestamps: true,
