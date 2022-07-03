@@ -68,15 +68,16 @@ module.exports = {
   async auth(req, res, next) {
     const { email, password } = req.body;
 
-    if (!email || !password) next(new HttpError(400, "Wrong email/password"));
+    if (!email || !password)
+      return next(new HttpError(402, "Wrong email/password"));
 
     const user = await db.User.findOne({ where: { email } });
 
-    if (!user) next(new HttpError(400, "Wrong email/password"));
+    if (!user) return next(new HttpError(401, "Wrong email/password"));
 
     const passwordMatch = await compare(password, user.password);
 
-    if (!passwordMatch) next(new HttpError(400, "Wrong email/password"));
+    if (!passwordMatch) return next(new HttpError(401, "Wrong email/password"));
 
     const token = generateJwt(user.id, user.email, user.role, user.name);
 
