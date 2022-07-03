@@ -1,4 +1,4 @@
-const { UUIDV4 } = require("sequelize");
+const { v4: UUIDV4 } = require("uuid");
 const db = require("../models");
 const HttpError = require("../utils/HttpError");
 
