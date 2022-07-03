@@ -1,4 +1,5 @@
 const db = require("../models");
+const HttpError = require("../utils/HttpError");
 
 const is = (roles) => {
   return async (req, res, next) => {
@@ -9,11 +10,11 @@ const is = (roles) => {
       include: [{ model: db.Role, as: "Role" }],
     });
 
-    if (!user) return res.status(400).json("User not found");
+    if (!user) return next(new HttpError(400, "User not found"));
 
     const userHasRole = roles.includes(user.Role.name);
 
-    if (!userHasRole) return res.status(403).end();
+    if (!userHasRole) return next(new HttpError(403), "User role error");
 
     next();
   };
