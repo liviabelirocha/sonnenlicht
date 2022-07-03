@@ -86,6 +86,11 @@ module.exports = {
       addressLocation,
       addressNumber,
       addressStreet,
+      description,
+      bedroom_quantity,
+      bathroom_quantity,
+      parking_slot_quantity,
+      area,
     } = req.body;
 
     const ownerUserId = req.user_id;
@@ -108,6 +113,11 @@ module.exports = {
         address_street: addressStreet,
         status: "pending",
         owner_id: owner.id,
+        description,
+        bedroom_quantity,
+        bathroom_quantity,
+        parking_slot_quantity,
+        area,
       });
 
       return res.status(200).json(offer);
