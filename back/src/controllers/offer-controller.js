@@ -4,7 +4,7 @@ const HttpError = require("../utils/HttpError");
 
 module.exports = {
   async list(req, res) {
-    const offers = await db.Offer.findAll();
+    const offers = await db.Offer.findAll({ include: ["Owner"] });
     return res.status(200).json(offers);
   },
 
@@ -26,10 +26,26 @@ module.exports = {
 
   async owner(req, res) {
     const { id } = req.params;
+    try {
+      const offer = await db.Offer.findOne({ where: { id } });
 
-    const offer = await db.Offer.findOne({ where: { id } });
+      if (!offer) {
+        return next(new HttpError(403, "Invalid Offer"));
+      }
 
-    return res.status(200).json(offer.Owner);
+      const owner = await offer.getOwner();
+
+      return res.status(200).json(owner);
+    } catch (err) {
+      return next(
+        new HttpError(
+          err.statusCode ? err.statusCode : 402,
+          err.message
+            ? err.message
+            : "There was a problem querying the requested data."
+        )
+      );
+    }
   },
 
   async approve(req, res, next) {
