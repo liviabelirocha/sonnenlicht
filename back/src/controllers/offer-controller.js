@@ -4,7 +4,9 @@ const HttpError = require("../utils/HttpError");
 
 module.exports = {
   async list(req, res) {
-    const offers = await db.Offer.findAll({ include: ["Owner"] });
+    const offers = await db.Offer.findAll({
+      include: [{ model: db.Owner, attributes: [], include: ["User"] }],
+    });
     return res.status(200).json(offers);
   },
 
@@ -35,7 +37,9 @@ module.exports = {
 
       const owner = await offer.getOwner();
 
-      return res.status(200).json(owner);
+      const user = await owner.getUser();
+
+      return res.status(200).json(user);
     } catch (err) {
       return next(
         new HttpError(
