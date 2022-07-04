@@ -16,6 +16,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       });
+      this.belongsTo(models.User, {
+        as: "User",
+        foreignKey: {
+          name: "user_id",
+          allowNull: false,
+        },
+        onDelete: "CASCADE",
+      });
     }
   }
   Owner.init(
