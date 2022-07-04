@@ -4,10 +4,23 @@ const HttpError = require("../utils/HttpError");
 
 module.exports = {
   async list(req, res) {
-    const offers = await db.Offer.findAll({
-      include: [{ model: db.Owner, attributes: [], include: ["User"] }],
-    });
-    return res.status(200).json(offers);
+    try {
+      const offers = await db.Offer.findAll({
+        include: [
+          { model: db.Owner, as: "Owner", attributes: [], include: ["User"] },
+        ],
+      });
+      return res.status(200).json(offers);
+    } catch (err) {
+      return next(
+        new HttpError(
+          err.statusCode ? err.statusCode : 500,
+          err.message
+            ? err.message
+            : "There was a problem querying the requested data."
+        )
+      );
+    }
   },
 
   async listOwner(req, res) {
