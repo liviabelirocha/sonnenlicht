@@ -1,7 +1,9 @@
-import { Button, Checkbox, Col, Form, Input } from 'antd'
+import { Alert, Button, Checkbox, Col, Form, Input } from 'antd'
+import axios from 'axios'
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import useToken from '../hooks/useToken'
+import { useUserData } from '../hooks/useUserData'
 
 const StyledContainer = styled.div(
   () => css`
@@ -17,36 +19,45 @@ const StyledContainer = styled.div(
       width: 50%;
     }
 
+    .login-alert {
+      margin-bottom: 3vh;
+    }
+
+    .hidden {
+      display: none;
+    }
+
     .registerButton {
       margin-left: 2vw;
     }
   `
 )
 
-async function loginUser(body) {
-  // return fetch('http://localhost:8080/login', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(body),
-  // }).then((data) => data.json())
-  return "token-test"
-}
-
 const SignIn = () => {
-  const [username, setUserName] = useState()
+  const [email, setUserName] = useState()
   const [password, setPassword] = useState()
+  const [hasAlert, setHasAlert] = useState(false)
 
-  const { setToken } = useToken()
+  const { setUserData } = useUserData()
+
+  const loginUser = async (body) => {
+    try {
+      const res = await axios
+        .post('https://sonnenlicht-back.herokuapp.com/api/auth', body)
+      return res.data
+    } catch (error) {
+      setHasAlert(true)
+    }
+  }
 
   const onFinish = async (values) => {
-    const token = await loginUser({
-      username,
+    const data = await loginUser({
+      email,
       password,
     })
-    setToken(token)
+    setUserData(data)
   }
+  
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
@@ -68,13 +79,11 @@ const SignIn = () => {
           autoComplete="off"
         >
           <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input
-              onChange={(e) => setUserName(e.target.value)}
-            />
+            <Input onChange={(e) => setUserName(e.target.value)} />
           </Form.Item>
 
           <Form.Item
@@ -92,6 +101,8 @@ const SignIn = () => {
           >
             <Checkbox>Remember me</Checkbox>
           </Form.Item>
+
+          <Alert className={`login-alert ${!hasAlert && 'hidden'}`} message="Invalid data!" type="error" />
 
           <Form.Item wrapperCol={{ offset: 4, span: 16 }}>
             <Button className="signInButton" type="primary" htmlType="submit">

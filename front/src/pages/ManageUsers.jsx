@@ -1,9 +1,14 @@
 import { Table } from 'antd'
+import jwt_decode from 'jwt-decode'
+import axios from 'axios'
 import styled, { css } from 'styled-components'
+import ActionSwitch from '../components/ActionSwitch'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import useToken from '../hooks/useToken'
 import SignIn from './SignIn'
+import { useUserData } from '../hooks/useUserData'
+import ErrorPage from './ErrorPage'
 
 const StyledTable = styled.div(
   () => css`
@@ -14,20 +19,18 @@ const StyledTable = styled.div(
 )
 
 const ManageUsers = () => {
-  const { token } = useToken()
-  if(!token) {
-    return <SignIn />
-  }
+  const { userData } = useUserData()
+
   const users = [
     {
       name: 'John Brown',
-      address: 'Big Address Here',
-      action: 'Approve',
+      email: 'Big email Here',
+      role: 'owner',
     },
     {
       name: 'John Brown',
-      address: 'Big Address Here',
-      action: 'Approve',
+      email: 'Big email Here',
+      role: 'admin',
     },
   ]
 
@@ -38,23 +41,21 @@ const ManageUsers = () => {
   let userFilterOptions = users.reduce(
     (accumulate, user) => {
       accumulate.names = [...accumulate.names, user.name]
-      accumulate.addresses = [...accumulate.addresses, user.address]
+      accumulate.emails = [...accumulate.emails, user.email]
       return accumulate
     },
     {
       names: [],
-      addresses: [],
+      emails: [],
     }
   )
 
-  let { names, addresses } = userFilterOptions
+  let { names, emails } = userFilterOptions
 
   names = names.filter(unique).map((name) => ({ text: name, value: name }))
-  addresses = addresses
-    .filter(unique)
-    .map((address) => ({ text: address, value: address }))
+  emails = emails.filter(unique).map((email) => ({ text: email, value: email }))
 
-  userFilterOptions = { names, addresses }
+  userFilterOptions = { names, emails }
 
   const columns = [
     {
@@ -63,34 +64,40 @@ const ManageUsers = () => {
       filterSearch: true,
       filterMode: 'tree',
       filters: userFilterOptions.names,
-      onFilter: (value, record) => {
-        record.name.startsWith(value)
-      },
+      onFilter: (value, record) => record.name.includes(value),
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
+      title: 'email',
+      dataIndex: 'email',
       filterSearch: true,
       filterMode: 'tree',
-      filters: userFilterOptions.addresses,
-      onFilter: (value, record) => {
-        record.address.startsWith(value)
-      },
+      filters: userFilterOptions.emails,
+      onFilter: (value, record) => record.email.includes(value),
     },
     {
-      title: 'Ação',
-      dataIndex: 'action',
+      title: 'Admin',
+      dataIndex: 'role',
+      render: (record) => {
+        const checked = record === 'admin'
+        return <ActionSwitch checked={checked}></ActionSwitch>
+      },
     },
   ]
 
   const data = users.map((user, index) => ({
     key: `offer-${index + 1}`,
     name: `${user.name}`,
-    address: `${user.address}`,
-    action: `${user.action}`,
+    email: `${user.email}`,
+    role: `${user.role}`,
   }))
 
-  return (
+  console.log(userData && userData.token)
+
+  return !userData || !userData.token ? (
+    <SignIn />
+  ) : !(userData && userData.role === 'Admin') ? (
+    <ErrorPage />
+  ) : (
     <>
       <Header></Header>
       <StyledTable>

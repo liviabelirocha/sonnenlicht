@@ -1,18 +1,23 @@
 import { Button } from 'antd'
+import { useEffect } from 'react'
 import { useState } from 'react'
 import '../styles/components/Filter.scss'
 import FilterSelect from './FilterSelect'
 
-const offerTypeOptions = ['Rent', 'Buy']
-const locationOptions = ['Fortaleza', 'São Paulo']
-const propertyTypeOptions = ['Small House', 'Apartment', 'Mansion']
-const averagePriceOptions = ['$850 - $1200', '$1200 - $2000']
+const offerTypeOptions = ['All', 'sell', 'Buy']
+const locationOptions = ['All', 'Fortaleza', 'São Paulo']
+const propertyTypeOptions = ['All', 'small house', 'apartment', 'Mansion']
+const averagePriceOptions = ['All', '1000', '1000000']
 
-const Filter = (props) => {
+const Filter = ({ handleFilter, ...props }) => {
   const [offerType, setOfferType] = useState(offerTypeOptions[0])
   const [location, setLocation] = useState(locationOptions[0])
   const [propertyType, setPropertyType] = useState(propertyTypeOptions[0])
   const [averagePrice, setAveragePrice] = useState(averagePriceOptions[0])
+
+  const handleFilterSearch = () => {
+    handleFilter({ offerType, location, propertyType, averagePrice })
+  }
 
   return (
     <div className="filter" {...props}>
@@ -40,7 +45,11 @@ const Filter = (props) => {
         selectActiveOption={averagePrice}
         handleChange={setAveragePrice}
       ></FilterSelect>
-      <Button type="primary" className="search_button">
+      <Button
+        type="primary"
+        className="search_button"
+        onClick={handleFilterSearch}
+      >
         Search
       </Button>
     </div>

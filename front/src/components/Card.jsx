@@ -20,8 +20,8 @@ const StyledStatus = styled.div(
 
 const Card = ({
   title,
-  details,
-  img,
+  description,
+  img = 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
   price,
   handleClick = () => {},
   status = '',
@@ -45,11 +45,7 @@ const Card = ({
           )}
           <p className="card__price">R${price}</p>
         </Row>
-        {details.map((detail, index) => (
-          <p className="card__details" key={`detail-${index}`}>
-            {detail}
-          </p>
-        ))}
+        {description}
       </div>
     </div>
   )

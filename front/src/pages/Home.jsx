@@ -1,5 +1,6 @@
 import { Col } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Card } from '../components/Card'
@@ -38,29 +39,35 @@ const Home = ({ houses = [] }) => {
   const [currentOffer, setCurrentOffer] = useState(cardItems[0])
 
   useEffect(() => {
-    const newHouses = []
-    for (let i = 0; i < 3; i++) {
-      newHouses.push({
-        title: 'Apartamento em Fortaleza',
-        city: 'Fortaleza',
-        details: [
-          'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
-        ],
-        img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
-        price: '6.000',
-      })
-      newHouses.push({
-        title: 'Apartamento em São Paulo',
-        city: 'São Paulo',
-        details: [
-          'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
-        ],
-        img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
-        price: '6.000',
-      })
+    const fetchOffers = async () => {
+      const offers = await axios.get(
+        'https://sonnenlicht-back.herokuapp.com/api/offers'
+      )
+      setOriginalHouses(offers.data)
+      setFilteredHouses(offers.data)
     }
-    setOriginalHouses(newHouses)
-    setFilteredHouses(newHouses)
+    fetchOffers()
+
+    // for (let i = 0; i < 3; i++) {
+    //   newHouses.push({
+    //     title: 'Apartamento em Fortaleza',
+    //     city: 'Fortaleza',
+    //     details: [
+    //       'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
+    //     ],
+    //     img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
+    //     price: '6.000',
+    //   })
+    //   newHouses.push({
+    //     title: 'Apartamento em São Paulo',
+    //     city: 'São Paulo',
+    //     details: [
+    //       'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
+    //     ],
+    //     img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
+    //     price: '6.000',
+    //   })
+    // }
   }, [])
 
   const handleChangeCity = (e) => {
@@ -68,12 +75,38 @@ const Home = ({ houses = [] }) => {
     if (newCity === 'all') return setFilteredHouses(originalHouses)
     setFilteredHouses(
       originalHouses.filter((house) => {
-        return house.city === newCity
+        return house.address_location === newCity
       })
     )
   }
 
-  const handleCardClick = () => {
+  const allOptions = (option) => {
+    if (option === "All"){
+      
+    }
+  }
+
+  const handleFilter = ({
+    offerType,
+    location,
+    propertyType,
+    averagePrice,
+  }) => {
+    setFilteredHouses(
+      originalHouses.filter((house) => {
+        return (
+          house.address_location === location &&
+          house.property_type === propertyType &&
+          house.offer_type === offerType &&
+          parseInt(house.price) < parseInt(averagePrice)
+        )
+      })
+    )
+  }
+
+  const handleCardClick = (offer) => {
+    console.log(offer)
+    setCurrentOffer(offer)
     setIsModalOpen((curr) => !curr)
   }
 
@@ -84,7 +117,7 @@ const Home = ({ houses = [] }) => {
       <Header></Header>
       <div className="home-layout">
         <div className="filter_section">
-          <Filter></Filter>
+          <Filter handleFilter={handleFilter}></Filter>
         </div>
         <h2 className="content__title-section">Properties</h2>
         <div className="content">
@@ -95,10 +128,10 @@ const Home = ({ houses = [] }) => {
                   <Card
                     key={`card-${index}`}
                     title={house.title}
-                    details={house.details}
+                    description={house.description}
                     img={house.img}
                     price={house.price}
-                    handleClick={handleCardClick}
+                    handleClick={() => handleCardClick(house)}
                   ></Card>
                 )
               })}

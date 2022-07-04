@@ -134,11 +134,16 @@ const StyledOffer = styled.section(
           > div:first-child {
             display: flex;
             justify-content: space-evenly;
-            padding-right: 10vw;
 
             .detail-card {
               width: 120px;
-              height: 120px;
+              height: 140px;
+
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items : center;
+              font-weight: 600;
             }
           }
 
@@ -262,10 +267,21 @@ const LowerBarStatus = ({
   )
 }
 
+const { Meta } = Card
+
 const Offer = ({
   price = '$ 200.000',
   title = 'Family size House',
   description = MOCK_DEFAULT_DESCRIPTION,
+  address_location = 'Berlin',
+  address_number,
+  address_street,
+  area,
+  bathroom_quantity,
+  bedroom_quantity,
+  offer_type,
+  parking_slot_quantity,
+  property_type,
   status = 'normal',
   adminValidation = false,
 }) => {
@@ -287,7 +303,7 @@ const Offer = ({
               </span>
               <div>
                 <CompassFilled />
-                <div>Berlin</div>
+                <div>{address_location}</div>
               </div>
             </div>
           </Col>
@@ -310,11 +326,48 @@ const Offer = ({
         </Row>
         <Row className="middle__content">
           <Col span={12}>
-            <Card className="detail-card" />
-            <Card className="detail-card" />
-            <Card className="detail-card" />
+            <Card
+              cover={
+                <img
+                  alt="example"
+                  src="https://media.istockphoto.com/photos/white-bathroom-picture-id187222933?k=20&m=187222933&s=170667a&w=0&h=ImTqUTwJ-q7EN5iYBuBNgjGzuzCNvYXfYA0KhknbyzM="
+                  height="80px"
+                />
+              }
+              className="detail-card"
+            >{bathroom_quantity}</Card>
+            <Card
+              cover={
+                <img
+                  alt="example"
+                  src="https://media.istockphoto.com/photos/stylish-bedroom-interior-in-trendy-blue-picture-id1191685303?k=20&m=1191685303&s=612x612&w=0&h=5u54Q_8060N8e0Pc4iuu_PPCFkniSuoNxLbIKbcEf_4="
+                  height="80px"
+                />
+              }
+              className="detail-card"
+            >{bedroom_quantity}</Card>
+            <Card
+              cover={
+                <img
+                  alt="example"
+                  src="https://t4.ftcdn.net/jpg/01/13/27/09/360_F_113270995_v0RgIm4UIV0VFJw30vM4ZeptxaeHZOuK.jpg"
+                  height="80px"
+                />
+              }
+              className="detail-card"
+            >{parking_slot_quantity}</Card>
+            <Card
+              cover={
+                <img
+                  alt="example"
+                  src="https://previews.123rf.com/images/andreypopov/andreypopov1701/andreypopov170101095/69612931-different-size-of-houses-arranged-in-row-on-grassy-field.jpg"
+                  height="80px"
+                />
+              }
+              className="detail-card"
+            >{area}</Card>
           </Col>
-          <Col span={11}>
+          <Col span={9} offset={2}>
             <h1>Description</h1>
             <span>{description}</span>
           </Col>
