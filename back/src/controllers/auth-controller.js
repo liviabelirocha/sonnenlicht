@@ -71,7 +71,10 @@ module.exports = {
     if (!email || !password)
       return next(new HttpError(402, "Wrong email/password"));
 
-    const user = await db.User.findOne({ where: { email }, include: ["Role"] });
+    const user = await db.User.scope("withPassword").findOne({
+      where: { email },
+      include: ["Role"],
+    });
 
     if (!user) return next(new HttpError(401, "Wrong email/password"));
 
