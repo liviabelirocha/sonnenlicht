@@ -9,6 +9,7 @@ import useToken from '../hooks/useToken'
 import SignIn from './SignIn'
 import { useUserData } from '../hooks/useUserData'
 import ErrorPage from './ErrorPage'
+import { useEffect, useState } from 'react'
 
 const StyledTable = styled.div(
   () => css`
@@ -21,18 +22,18 @@ const StyledTable = styled.div(
 const ManageUsers = () => {
   const { userData } = useUserData()
 
-  const users = [
-    {
-      name: 'John Brown',
-      email: 'Big email Here',
-      role: 'owner',
-    },
-    {
-      name: 'John Brown',
-      email: 'Big email Here',
-      role: 'admin',
-    },
-  ]
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    const fetchOffers = async () => {
+      const allUsers = (await axios.get(
+        'https://sonnenlicht-back.herokuapp.com/api/user/'
+      )).data.filter(user => user.id !== userData.id)
+      console.log(allUsers)
+      setUsers(allUsers)
+    }
+    fetchOffers()
+  }, [])
 
   const unique = (value, index, self) => {
     return self.indexOf(value) === index
@@ -77,9 +78,9 @@ const ManageUsers = () => {
     {
       title: 'Admin',
       dataIndex: 'role',
-      render: (record) => {
-        const checked = record === 'admin'
-        return <ActionSwitch checked={checked}></ActionSwitch>
+      render: (value, record) => {
+        const checked = value === 'Admin'
+        return <ActionSwitch checked={checked} {...record}></ActionSwitch>
       },
     },
   ]
@@ -88,16 +89,11 @@ const ManageUsers = () => {
     key: `offer-${index + 1}`,
     name: `${user.name}`,
     email: `${user.email}`,
-    role: `${user.role}`,
+    role: `${user.Role.name}`,
+    id: user.id
   }))
 
-  console.log(userData && userData.token)
-
-  return !userData || !userData.token ? (
-    <SignIn />
-  ) : !(userData && userData.role === 'Admin') ? (
-    <ErrorPage />
-  ) : (
+  return (
     <>
       <Header></Header>
       <StyledTable>

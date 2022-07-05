@@ -1,8 +1,8 @@
 import { Alert, Button, Checkbox, Col, Form, Input } from 'antd'
 import axios from 'axios'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
-import useToken from '../hooks/useToken'
 import { useUserData } from '../hooks/useUserData'
 
 const StyledContainer = styled.div(
@@ -40,6 +40,8 @@ const SignIn = () => {
 
   const { setUserData } = useUserData()
 
+  const navigate = useNavigate()
+
   const loginUser = async (body) => {
     try {
       const res = await axios
@@ -56,6 +58,7 @@ const SignIn = () => {
       password,
     })
     setUserData(data)
+    navigate("/listing")
   }
   
 

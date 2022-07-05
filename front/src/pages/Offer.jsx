@@ -1,8 +1,11 @@
-import { Col, Row, Card, Avatar, Button } from 'antd'
+import { Col, Row, Card, Avatar, Button, Spin } from 'antd'
 import { CheckOutlined, CloseOutlined, CompassFilled } from '@ant-design/icons'
 import { useParams } from 'react-router-dom'
 
 import styled, { css } from 'styled-components'
+import axios from 'axios'
+import { useUserData } from '../hooks/useUserData'
+import { useState } from 'react'
 
 export const defaultBackground =
   'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096'
@@ -12,17 +15,17 @@ const renderStatus = (status, options) => {
     ? options.normal
     : status === 'approved'
     ? options.approved
-    : status === 'reproved'
-    ? options.reproved
+    : status === 'rejected'
+    ? options.rejected
     : status === 'pending'
     ? options.pending
     : ''
 }
 
-const makeOptions = (normal, approved, reproved, pending) => ({
+const makeOptions = (normal, approved, rejected, pending) => ({
   normal,
   approved,
-  reproved,
+  rejected,
   pending,
 })
 
@@ -142,7 +145,7 @@ const StyledOffer = styled.section(
               display: flex;
               flex-direction: column;
               justify-content: center;
-              align-items : center;
+              align-items: center;
               font-weight: 600;
             }
           }
@@ -196,17 +199,16 @@ const StyledOffer = styled.section(
 
 const StyledButton = styled.div(
   () => css`
-    .ant-btn {
-      color: #fa7456;
-
-      &:hover {
-        border-color: #fa7456;
-      }
+    display: flex;
+    flex-direction: column;
+    > h2 {
+      color: #fff;
     }
   `
 )
 
-const LowerBarOwner = () => {
+const LowerBarOwner = (props) => {
+  const { name, phone_number, email } = props.User
   return (
     <>
       <Col>
@@ -216,15 +218,14 @@ const LowerBarOwner = () => {
         />
         <div>
           <h1>
-            <b>Werner Siegfried</b>
+            <b>{name}</b>
           </h1>
           <p>Property Owner</p>
         </div>
       </Col>
       <StyledButton>
-        <Button size="large">
-          <b>Contact</b>
-        </Button>
+        <h2>Phone Number: {phone_number ? phone_number : '-'}</h2>
+        <h2>Email: {email}</h2>
       </StyledButton>
     </>
   )
@@ -234,7 +235,7 @@ const StyledLowerBarStatus = styled.div(
   ({ status }) => css`
     display: flex;
     width: 100%;
-    justify-content: ${status !== 'reproved' ? 'center' : 'space-evenly'};
+    justify-content: ${status !== 'rejected' ? 'center' : 'space-evenly'};
     align-items: center;
     color: white;
     font-size: 1.5rem;
@@ -262,7 +263,7 @@ const LowerBarStatus = ({
   return (
     <StyledLowerBarStatus status={status} span={24}>
       {statusName}
-      {status === 'reproved' && <span>{description}</span>}
+      {status === 'rejected' && <span>{description}</span>}
     </StyledLowerBarStatus>
   )
 }
@@ -271,6 +272,7 @@ const { Meta } = Card
 
 const Offer = ({
   price = '$ 200.000',
+  id,
   title = 'Family size House',
   description = MOCK_DEFAULT_DESCRIPTION,
   address_location = 'Berlin',
@@ -283,15 +285,36 @@ const Offer = ({
   parking_slot_quantity,
   property_type,
   status = 'normal',
+  Owner,
   adminValidation = false,
 }) => {
   const params = useParams()
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { userData } = useUserData()
+
+  const handleAction = async (action) => {
+    setIsLoading(true)
+    console.log(id)
+    await axios.patch(
+      `https://sonnenlicht-back.herokuapp.com/api/${action}/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      }
+    )
+    window.location.reload()
+    setIsLoading(false)
+  }
 
   return (
     <StyledOffer status={status}>
       <Row>
         <div className="price">
-          <span>{price}</span>
+          <span>${price}</span>
         </div>
       </Row>
       <Row>
@@ -309,18 +332,22 @@ const Offer = ({
           </Col>
           {adminValidation && (
             <div className="validation__container">
-              <Button
-                type="primary"
-                shape="round"
-                icon={<CheckOutlined />}
-                size={'large'}
-              />
-              <Button
-                type="primary"
-                shape="round"
-                icon={<CloseOutlined />}
-                size={'large'}
-              />
+              <Spin spinning={isLoading}>
+                <Button
+                  type="primary"
+                  shape="round"
+                  icon={<CheckOutlined />}
+                  size={'large'}
+                  onClick={() => handleAction("approve")}
+                />
+                <Button
+                  type="primary"
+                  shape="round"
+                  icon={<CloseOutlined />}
+                  size={'large'}
+                  onClick={() => handleAction("reject")}
+                />
+              </Spin>
             </div>
           )}
         </Row>
@@ -335,7 +362,9 @@ const Offer = ({
                 />
               }
               className="detail-card"
-            >{bathroom_quantity}</Card>
+            >
+              {bathroom_quantity}
+            </Card>
             <Card
               cover={
                 <img
@@ -345,7 +374,9 @@ const Offer = ({
                 />
               }
               className="detail-card"
-            >{bedroom_quantity}</Card>
+            >
+              {bedroom_quantity}
+            </Card>
             <Card
               cover={
                 <img
@@ -355,7 +386,9 @@ const Offer = ({
                 />
               }
               className="detail-card"
-            >{parking_slot_quantity}</Card>
+            >
+              {parking_slot_quantity}
+            </Card>
             <Card
               cover={
                 <img
@@ -365,7 +398,9 @@ const Offer = ({
                 />
               }
               className="detail-card"
-            >{area}</Card>
+            >
+              {area}
+            </Card>
           </Col>
           <Col span={9} offset={2}>
             <h1>Description</h1>
@@ -377,7 +412,7 @@ const Offer = ({
         {renderStatus(
           status,
           makeOptions(
-            <LowerBarOwner />,
+            <LowerBarOwner {...Owner} status="normal" />,
             <LowerBarStatus status="approved" statusName="Approved" />,
             <LowerBarStatus status="reproved" statusName="Reproved" />,
             <LowerBarStatus status="pending" statusName="Pending" />

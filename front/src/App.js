@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 
 import 'antd/dist/antd.less'
 import ApplicationProvider from './hooks'
+import RouterAll from './routerAll'
 
 const StyledApp = styled.div(
   () => css`
@@ -14,7 +15,7 @@ function App() {
   return (
     <ApplicationProvider>
       <StyledApp>
-        <Router />
+        <RouterAll />
       </StyledApp>
     </ApplicationProvider>
   )

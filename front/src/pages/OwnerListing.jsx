@@ -7,8 +7,8 @@ import { Card } from '../components/Card'
 import Filter from '../components/Filter'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import { useUserData } from '../hooks/useUserData'
 
-import '../styles/pages/Home.scss'
 import Offer from './Offer'
 
 const cardItems = [
@@ -28,22 +28,29 @@ const cardItems = [
   },
 ]
 
-const Home = ({ houses = [] }) => {
+const OwnerListing = ({ houses = [] }) => {
   const [filteredHouses, setFilteredHouses] = useState(houses)
   const [originalHouses, setOriginalHouses] = useState(houses)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const options = ['Fortaleza', 'São Paulo']
-
   const [currentOffer, setCurrentOffer] = useState(cardItems[0])
+
+  const { userData } = useUserData()
 
   useEffect(() => {
     const fetchOffers = async () => {
       const offers = await axios.get(
-        'https://sonnenlicht-back.herokuapp.com/api/offers/?status=approved'
+        'https://sonnenlicht-back.herokuapp.com/api/my-offers',
+        {
+          headers: {
+            "Content-Type": 'application/json',
+            Authorization: `Bearer ${userData.token}`,
+          },
+        }
       )
       const approvedOffers = offers.data
+      console.log(approvedOffers)
       setOriginalHouses(approvedOffers)
       setFilteredHouses(approvedOffers)
     }
@@ -54,7 +61,7 @@ const Home = ({ houses = [] }) => {
     //     title: 'Apartamento em Fortaleza',
     //     city: 'Fortaleza',
     //     details: [
-    //       'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
+    //       'Beautiful family OwnerListing give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
     //     ],
     //     img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
     //     price: '6.000',
@@ -63,7 +70,7 @@ const Home = ({ houses = [] }) => {
     //     title: 'Apartamento em São Paulo',
     //     city: 'São Paulo',
     //     details: [
-    //       'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
+    //       'Beautiful family OwnerListing give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
     //     ],
     //     img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
     //     price: '6.000',
@@ -115,7 +122,7 @@ const Home = ({ houses = [] }) => {
   return (
     <>
       <Header></Header>
-      <div className="home-layout">
+      <div className="OwnerListing-layout">
         <div className="filter_section">
           <Filter handleFilter={handleFilter}></Filter>
         </div>
@@ -124,6 +131,7 @@ const Home = ({ houses = [] }) => {
           {filteredHouses.length === 0
             ? ''
             : filteredHouses.map((house, index) => {
+              console.log(house)
                 return (
                   <Card
                     key={`card-${index}`}
@@ -131,6 +139,7 @@ const Home = ({ houses = [] }) => {
                     description={house.description}
                     img={house.img}
                     price={house.price}
+                    status={house.status}
                     handleClick={() => handleCardClick(house)}
                   ></Card>
                 )
@@ -148,7 +157,7 @@ const Home = ({ houses = [] }) => {
         width="80vw"
       >
         <Col style={{ height: '80vh', width: '100vw' }}>
-          <Offer {...currentOffer} status="normal"></Offer>
+          <Offer {...currentOffer}></Offer>
         </Col>
       </Modal>
       <Footer></Footer>
@@ -156,4 +165,4 @@ const Home = ({ houses = [] }) => {
   )
 }
 
-export { Home }
+export { OwnerListing }

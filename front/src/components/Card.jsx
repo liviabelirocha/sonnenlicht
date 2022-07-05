@@ -26,6 +26,11 @@ const Card = ({
   handleClick = () => {},
   status = '',
 }) => {
+  const correctStatus = {
+    pending: "warning",
+    approved: "success",
+    rejected: "error"
+  }
   return (
     <div className="card" onClick={handleClick}>
       <div className="card__content">
@@ -37,7 +42,7 @@ const Card = ({
           {status ? (
             <Col span={2}>
               <StyledStatus>
-                <Badge status={`${status}`} />
+                <Badge status={`${correctStatus[status]}`} />
               </StyledStatus>
             </Col>
           ) : (

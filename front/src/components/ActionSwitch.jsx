@@ -1,19 +1,30 @@
 import { Switch } from 'antd'
+import axios from 'axios'
 import { useState } from 'react'
+import { useUserData } from '../hooks/useUserData'
 
-const ActionSwitch = ({ checked = false }) => {
-  const [ isLoading, setIsLoading ] = useState(false)
-  const [ isChecked, setIsChecked ] = useState(checked)
+const ActionSwitch = ({ checked = false, id, role }) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [isChecked, setIsChecked] = useState(checked)
 
-  const handleChange = (value) => {
+  const { userData } = useUserData()
+
+  const handleChange = async (value) => {
     setIsLoading(true)
-    // make API call
-    console.log("Delay for 2 second.");
-    setTimeout(() => {
-      console.log('loading false')
-      setIsLoading(false)
-      setIsChecked(value)
-    }, 2000)
+    await axios.patch(
+      `https://sonnenlicht-back.herokuapp.com/api/user/${id}`,
+      {
+        role: `${role === 'Owner' ? 'Admin' : 'Owner'}`,
+      },
+      {
+        headers: {
+          "Content-Type": 'application/json',
+          Authorization: `Bearer ${userData.token}`,
+        },
+      }
+    )
+    setIsLoading(false)
+    setIsChecked(value)
   }
 
   return (

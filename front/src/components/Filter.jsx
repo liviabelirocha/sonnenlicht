@@ -4,10 +4,10 @@ import { useState } from 'react'
 import '../styles/components/Filter.scss'
 import FilterSelect from './FilterSelect'
 
-const offerTypeOptions = ['All', 'sell', 'Buy']
-const locationOptions = ['All', 'Fortaleza', 'São Paulo']
+const offerTypeOptions = ['All', 'sell', 'rent']
+const locationOptions = ['All', 'Fortaleza', 'São Paulo', 'loc']
 const propertyTypeOptions = ['All', 'small house', 'apartment', 'Mansion']
-const averagePriceOptions = ['All', '1000', '1000000']
+const averagePriceOptions = ['All', '1000', '100000', '200000']
 
 const Filter = ({ handleFilter, ...props }) => {
   const [offerType, setOfferType] = useState(offerTypeOptions[0])
@@ -40,7 +40,7 @@ const Filter = ({ handleFilter, ...props }) => {
         handleChange={setPropertyType}
       ></FilterSelect>
       <FilterSelect
-        title="Average Price"
+        title="Max Price"
         options={averagePriceOptions}
         selectActiveOption={averagePrice}
         handleChange={setAveragePrice}

@@ -8,7 +8,8 @@ const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState()
 
   useEffect(() => {
-    const localUserData = sessionStorage.getItem('user')
+    const userItem = sessionStorage.getItem('user')
+    const localUserData = userItem ? JSON.parse(userItem) : null
     if (!userData && localUserData) {
       setUserData(localUserData)
     }
@@ -16,7 +17,12 @@ const UserProvider = ({ children }) => {
 
   const saveUserData = (data) => {
     setUserData(data)
-    sessionStorage.setItem('user', data)
+    sessionStorage.setItem('user', JSON.stringify(data))
+  }
+
+  const clearUserData = () => {
+    sessionStorage.clear()
+    setUserData()
   }
 
   return (
@@ -24,6 +30,7 @@ const UserProvider = ({ children }) => {
       value={{
         userData,
         setUserData: saveUserData,
+        clearUserData
       }}
     >
       {children}

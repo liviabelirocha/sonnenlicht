@@ -1,10 +1,12 @@
 import { Col, Modal, Table } from 'antd'
-import { useState } from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import DashboardNumbers from '../components/DashboardNumbers'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import useToken from '../hooks/useToken'
+import { useUserData } from '../hooks/useUserData'
 import Offer from './Offer'
 import SignIn from './SignIn'
 
@@ -15,52 +17,64 @@ const StyledTable = styled.div(
   `
 )
 
-const offers = [
-  {
-    title: 'Apartamento em Fortaleza',
-    location: 'Fortaleza',
-    street: 'Belo Horizonte',
-    details: [
-      'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
-    ],
-    img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
-    price: '6.000',
-  },
-  {
-    title: 'Apartamento em São Paulo',
-    location: 'São Paulo',
-    street: 'Belo Horizonte',
-    details: [
-      'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
-    ],
-    img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
-    price: '6.000',
-  },
-]
+// const offers = [
+//   {
+//     title: 'Apartamento em Fortaleza',
+//     location: 'Fortaleza',
+//     street: 'Belo Horizonte',
+//     details: [
+//       'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
+//     ],
+//     img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
+//     price: '6.000',
+//   },
+//   {
+//     title: 'Apartamento em São Paulo',
+//     location: 'São Paulo',
+//     street: 'Belo Horizonte',
+//     details: [
+//       'Beautiful family home give us the ability to stay by the sea with amazing blue background full of light of the sky, Florina give us its gentle side.',
+//     ],
+//     img: 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
+//     price: '6.000',
+//   },
+// ]
 
 const unique = (value, index, self) => {
   return self.indexOf(value) === index
 }
 
 const ManageOffers = () => {
-  const [currentOffer, setCurrentOffer] = useState(offers[0])
+  const [currentOffer, setCurrentOffer] = useState({})
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const { token } = useToken()
-  if(!token) {
-    return <SignIn />
-  }
+  const [offers, setOffers] = useState([])
+
+  const { userData } = useUserData()
+
+  useEffect(() => {
+    const fetchOffers = async () => {
+      const offers = await axios.get(
+        'https://sonnenlicht-back.herokuapp.com/api/offers'
+      )
+      const approvedOffers = offers.data.filter(
+        (offer) => offer.status === 'pending'
+      )
+      setCurrentOffer(approvedOffers[0])
+      setOffers(approvedOffers)
+    }
+    fetchOffers()
+  }, [])
 
   const handleCardClick = () => {
     setIsModalOpen((curr) => !curr)
   }
-
   let userFilterOptions = offers.reduce(
     (accumulate, offer) => {
       accumulate.titles = [...accumulate.titles, offer.title]
-      accumulate.locations = [...accumulate.locations, offer.location]
-      accumulate.streets = [...accumulate.streets, offer.street]
+      accumulate.locations = [...accumulate.locations, offer.address_location]
+      accumulate.streets = [...accumulate.streets, offer.address_street]
       accumulate.prices = [...accumulate.prices, offer.price]
       return accumulate
     },
@@ -125,15 +139,17 @@ const ManageOffers = () => {
   const data = offers.map((offer, index) => ({
     key: `offer-${index + 1}`,
     title: `${offer.title}`,
-    location: `${offer.location}`,
-    street: `${offer.street}`,
+    location: `${offer.address_location}`,
+    street: `${offer.address_street}`,
     price: `${offer.price}`,
+    Owner: offer.Owner,
+    id: offer.id,
   }))
 
   return (
     <>
       <Header></Header>
-      <DashboardNumbers pending_reviews={69} houses_available={420} />
+      <DashboardNumbers pending_reviews={offers.length} />
       <StyledTable>
         <Table
           columns={columns}
@@ -141,7 +157,8 @@ const ManageOffers = () => {
           onRow={(record) => {
             return {
               onClick: () => {
-                setCurrentOffer({...record})
+                console.log('record:', record)
+                setCurrentOffer({ ...record })
                 handleCardClick()
               },
             }
