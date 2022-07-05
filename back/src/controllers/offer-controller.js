@@ -7,7 +7,14 @@ module.exports = {
     try {
       const offers = await db.Offer.findAll({
         include: [
-          { model: db.Owner, as: "Owner", attributes: [], include: ["User"] },
+          {
+            model: db.Owner,
+            as: "Owner",
+            attributes: {
+              exclude: ["id", "user_id", "createdAt", "updatedAt"],
+            },
+            include: ["User"],
+          },
         ],
       });
       return res.status(200).json(offers);
