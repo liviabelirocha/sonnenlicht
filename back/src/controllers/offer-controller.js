@@ -4,7 +4,7 @@ const db = require("../models");
 const HttpError = require("../utils/HttpError");
 
 module.exports = {
-  async list(req, res) {
+  async list(req, res, next) {
     try {
       const { status } = req.query;
 
@@ -40,18 +40,39 @@ module.exports = {
 
   async listOwner(req, res) {
     const { user_id } = req;
-    const offers = await db.Offer.findAll({ where: { owner_id: user_id } });
-    return res.status(200).json(offers);
+    try {
+      const offers = await db.Offer.findAll({ where: { owner_id: user_id } });
+      return res.status(200).json(offers);
+    } catch (err) {
+      return next(
+        new HttpError(
+          err.statusCode ? err.statusCode : 500,
+          err.message
+            ? err.message
+            : "There was a problem querying the requested data."
+        )
+      );
+    }
   },
 
   async get(req, res, next) {
     const { id } = req.params;
+    try {
+      const offer = await db.Offer.findOne({ where: { id } });
 
-    const offer = await db.Offer.findOne({ where: { id } });
+      if (!offer) next(new HttpError(404, "Not Found"));
 
-    if (!offer) next(new HttpError(404, "Not Found"));
-
-    return res.status(200).json(offer);
+      return res.status(200).json(offer);
+    } catch (err) {
+      return next(
+        new HttpError(
+          err.statusCode ? err.statusCode : 500,
+          err.message
+            ? err.message
+            : "There was a problem querying the requested data."
+        )
+      );
+    }
   },
 
   async owner(req, res) {
@@ -82,47 +103,71 @@ module.exports = {
 
   async approve(req, res, next) {
     const { id } = req.params;
+    try {
+      const offer = await db.Offer.findOne({ where: { id } });
 
-    const offer = await db.Offer.findOne({ where: { id } });
+      if (!offer) next(new HttpError(404, "Not Found"));
 
-    if (!offer) next(new HttpError(404, "Not Found"));
+      const offerUpdated = await db.Offer.update(
+        { status: "approved" },
+        { where: { id } }
+      );
 
-    const offerUpdated = await db.Offer.update(
-      { status: "approved" },
-      { where: { id } }
-    );
-
-    return res.status(200).json(offerUpdated);
+      return res.status(200).json(offerUpdated);
+    } catch (err) {
+      return next(
+        new HttpError(
+          err.statusCode ? err.statusCode : 500,
+          err.message ? err.message : "Server error."
+        )
+      );
+    }
   },
 
   async reject(req, res, next) {
     const { id } = req.params;
+    try {
+      const offer = await db.Offer.findOne({ where: { id } });
 
-    const offer = await db.Offer.findOne({ where: { id } });
+      if (!offer) next(new HttpError(404, "Not Found"));
 
-    if (!offer) next(new HttpError(404, "Not Found"));
+      const offerUpdated = await db.Offer.update(
+        { status: "rejected" },
+        { where: { id } }
+      );
 
-    const offerUpdated = await db.Offer.update(
-      { status: "rejected" },
-      { where: { id } }
-    );
-
-    return res.status(200).json(offerUpdated);
+      return res.status(200).json(offerUpdated);
+    } catch (err) {
+      return next(
+        new HttpError(
+          err.statusCode ? err.statusCode : 500,
+          err.message ? err.message : "Server error."
+        )
+      );
+    }
   },
 
   async retry(req, res, next) {
     const { id } = req.params;
+    try {
+      const offer = await db.Offer.findOne({ where: { id } });
 
-    const offer = await db.Offer.findOne({ where: { id } });
+      if (!offer) next(new HttpError(404, "Not Found"));
 
-    if (!offer) next(new HttpError(404, "Not Found"));
+      const offerUpdated = await db.Offer.update(
+        { status: "pending" },
+        { where: { id } }
+      );
 
-    const offerUpdated = await db.Offer.update(
-      { status: "pending" },
-      { where: { id } }
-    );
-
-    return res.status(200).json(offerUpdated);
+      return res.status(200).json(offerUpdated);
+    } catch (err) {
+      return next(
+        new HttpError(
+          err.statusCode ? err.statusCode : 500,
+          err.message ? err.message : "Server error."
+        )
+      );
+    }
   },
 
   async create(req, res, next) {
