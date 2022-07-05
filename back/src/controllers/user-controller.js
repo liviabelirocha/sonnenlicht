@@ -34,10 +34,10 @@ module.exports = {
 
   async update(req, res) {
     const { id } = req.params;
-    const { phone_number, name } = req.body;
+    const { phoneNumber, name } = req.body;
 
     await db.User.update(
-      { phone_number, name },
+      { phone_number: phoneNumber, name },
       {
         where: {
           id,

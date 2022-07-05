@@ -51,6 +51,9 @@ module.exports = (sequelize, DataTypes) => {
       phone_number: DataTypes.STRING,
     },
     {
+      defaultScope: {
+        attributes: { exclude: ["password"] },
+      },
       sequelize,
       modelName: "User",
       tableName: "Users",

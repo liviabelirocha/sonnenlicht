@@ -11,7 +11,7 @@ module.exports = {
             model: db.Owner,
             as: "Owner",
             attributes: {
-              exclude: ["id", "user_id", "createdAt", "updatedAt"],
+              exclude: ["id", "createdAt", "updatedAt"],
             },
             include: ["User"],
           },
