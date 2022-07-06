@@ -7,13 +7,77 @@ import Filter from '../components/Filter'
 import HeroImg from '../assets/hero.png'
 import SellOrRent from '../assets/sellorrent.png'
 
-import '../styles/pages/LandingPage.scss'
+import styled, { css } from 'styled-components'
+
+const StyledLandingPage = styled.div(
+  () => css`
+    display: flex;
+    flex-direction: column;
+
+    .hero {
+      display: flex;
+      margin-left: 140px;
+      margin-right: 190px;
+      margin-top: 110px;
+      margin-bottom: 166px;
+
+      .texts {
+        margin-right: 130px;
+
+        h1 {
+          display: flex;
+          flex-direction: column;
+          font-size: 72px;
+          line-height: 66px;
+
+          span {
+            color: #FA7456;
+            font-size: 144px !important;
+          }
+        }
+
+        h2 {
+          font-size: 72px;
+          text-align: right;
+        }
+
+        button {
+          background: #000000;
+          border-radius: 30px;
+          color: #fff;
+          padding: 18px 56px;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .sell-or-rent {
+      display: flex;
+      margin-top: 128px;
+      margin-left: 70px;
+      margin-right: 235px;
+
+      .texts {
+        margin-left: 130px;
+
+        h2 {
+          font-size: 72px;
+          line-height: 76px;
+
+          span {
+            color: #FA7456;
+          }
+        }
+      }
+    }
+  `
+)
 
 const LandingPage = () => {
   const navigate = useNavigate()
 
   return (
-    <div id="landing-page">
+    <StyledLandingPage>
       <Header />
 
       <div className="hero">
@@ -58,7 +122,7 @@ const LandingPage = () => {
       </div>
 
       <Footer />
-    </div>
+    </StyledLandingPage>
   )
 }
 
