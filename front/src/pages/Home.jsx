@@ -147,7 +147,7 @@ const Home = ({ houses = [] }) => {
         footer={null}
         width="80vw"
       >
-        <Col style={{ height: '80vh', width: '100vw' }}>
+        <Col style={{ height: '85vh', width: '100vw' }}>
           <Offer {...currentOffer} status="normal"></Offer>
         </Col>
       </Modal>

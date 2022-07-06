@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import { useUserData } from '../hooks/useUserData'
 
+import LogoIcon from '../assets/logo.svg'
+
 const StyledFooter = styled.div(
   () => css`
     height: 20vh;
@@ -30,8 +32,7 @@ const Footer = () => {
         <Col span={10}>
           <Row>
             <Col>
-              <Avatar shape={'square'} />
-              <b> Sonnenlicht </b>
+              <img src={LogoIcon} alt="logo"></img>
             </Col>
           </Row>
           <Row>

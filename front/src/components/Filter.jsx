@@ -6,7 +6,7 @@ import FilterSelect from './FilterSelect'
 
 const offerTypeOptions = ['All', 'sell', 'rent']
 const locationOptions = ['All', 'Fortaleza', 'São Paulo', 'loc']
-const propertyTypeOptions = ['All', 'small house', 'apartment', 'Mansion']
+const propertyTypeOptions = ['All', 'small house', 'apartment', 'mansion']
 const averagePriceOptions = ['All', '1000', '100000', '200000']
 
 const Filter = ({ handleFilter, ...props }) => {

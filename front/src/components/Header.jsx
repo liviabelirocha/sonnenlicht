@@ -3,6 +3,8 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import { useUserData } from '../hooks/useUserData'
 
+import LogoIcon from '../assets/logo.svg'
+
 const StyledHeader = styled.div(
   () => css`
     background: #fefdf9;
@@ -22,6 +24,10 @@ const StyledHeader = styled.div(
         border-color: #fa7456;
         color: #fa7456;
       }
+    }
+
+    .login-register > button:first-child {
+      margin-right: 1vw;
     }
   `
 )
@@ -44,13 +50,12 @@ const Header = () => {
     <StyledHeader>
       <Row justify="space-between">
         <Col>
-          <Avatar alt={'Sonnenlicht Logo'} shape={'square'} />
-          <b> Sonnenlicht </b>
+          <img src={LogoIcon} alt="logo"></img>
         </Col>
         <Col span={12}>
           <Row justify="space-evenly" className="controls">
             <Col>
-              <Button type={'primary'} onClick={() => handleClick('/')}>
+              <Button onClick={() => handleClick('/')}>
                 <b>Home</b>
               </Button>
             </Col>
@@ -75,16 +80,16 @@ const Header = () => {
             )}
             {userData?.role === 'Owner' && (
               <>
-              <Col>
-                <Button onClick={() => handleClick('/create-offer')}>
-                  <b>Register Offer</b>
-                </Button>
-              </Col>
-              <Col>
-                <Button onClick={() => handleClick('/my-listing')}>
-                  <b>My Offers</b>
-                </Button>
-              </Col>
+                <Col>
+                  <Button onClick={() => handleClick('/create-offer')}>
+                    <b>Register Offer</b>
+                  </Button>
+                </Col>
+                <Col>
+                  <Button onClick={() => handleClick('/my-listing')}>
+                    <b>My Offers</b>
+                  </Button>
+                </Col>
               </>
             )}
           </Row>
@@ -94,13 +99,15 @@ const Header = () => {
             <b>Logout</b>
           </Button>
         ) : (
-          <Button type={'primary'} onClick={() => navigate('/signin')}>
-            <b>Login</b>
-          </Button>
+          <div className="login-register">
+            <Button type={'primary'} onClick={() => navigate('/signin')}>
+              <b>Login</b>
+            </Button>
+            <Button onClick={() => navigate('/signup')}>
+              <b>Register</b>
+            </Button>
+          </div>
         )}
-        <Button onClick={() => navigate('/signup')}>
-          <b>Register</b>
-        </Button>
       </Row>
     </StyledHeader>
   )

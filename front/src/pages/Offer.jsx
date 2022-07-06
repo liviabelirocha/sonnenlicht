@@ -62,7 +62,6 @@ const StyledOffer = styled.section(
       }
 
       > div:not(:first-child) {
-        position: absolute;
         border-radius: 20px 20px 0 0;
       }
 
@@ -80,12 +79,14 @@ const StyledOffer = styled.section(
         display: block;
         padding: 3vh 0 0 2vw;
 
-        height: 40vh;
+        min-height: 40vh;
+        height: auto;
         margin-top: -10vh;
         background-color: #fefdf9;
 
         .middle_header {
           display: flex;
+          flex-direction: row;
           justify-content: space-between;
 
           .name_location {
@@ -111,6 +112,11 @@ const StyledOffer = styled.section(
             }
           }
 
+          .complemental-offer-info {
+            font-size: 0.9rem;
+            margin-right: 5vw;
+          }
+
           .validation__container {
             display: flex;
             justify-content: space-between;
@@ -131,28 +137,43 @@ const StyledOffer = styled.section(
         }
 
         .middle__content {
-          margin-top: 2vh;
-          max-height: 15vh;
+          margin-top: 1.5vh;
+          height: auto;
+          margin-bottom: 1vh;
 
           > div:first-child {
             display: flex;
             justify-content: space-evenly;
 
             .detail-card {
-              width: 120px;
-              height: 140px;
-
+              height: auto;
               display: flex;
               flex-direction: column;
               justify-content: center;
               align-items: center;
               font-weight: 600;
+
+              .ant-card-body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0;
+
+                > span {
+                  margin-bottom: 0.5vh;
+                  width: auto;
+                }
+              }
             }
           }
 
           > div:nth-child(2) {
+            > h1 {
+              font-size: 1.5rem;
+              font-weight: 600;
+            }
             > span {
-              font-weight: 400;
+              font-size: 1rem;
             }
           }
         }
@@ -161,7 +182,6 @@ const StyledOffer = styled.section(
       > div:nth-child(3) {
         z-index: 1;
         height: 15vh;
-        margin-top: 25vh;
         background-color: ${renderStatus(
           status,
           makeOptions('#fa7456', '#008937', '#9F3000', '#FA7456')
@@ -330,6 +350,15 @@ const Offer = ({
               </div>
             </div>
           </Col>
+          <Col>
+            <div className="complemental-offer-info">
+              <span>
+                <b>Address: {address_street}, {address_number}</b>
+              </span> <br />
+              <span>Offer Type: {offer_type}</span> <br />
+              <span>Property Type: {property_type}</span> <br />
+            </div>
+          </Col>
           {adminValidation && (
             <div className="validation__container">
               <Spin spinning={isLoading}>
@@ -338,71 +367,83 @@ const Offer = ({
                   shape="round"
                   icon={<CheckOutlined />}
                   size={'large'}
-                  onClick={() => handleAction("approve")}
+                  onClick={() => handleAction('approve')}
                 />
                 <Button
                   type="primary"
                   shape="round"
                   icon={<CloseOutlined />}
                   size={'large'}
-                  onClick={() => handleAction("reject")}
+                  onClick={() => handleAction('reject')}
                 />
               </Spin>
             </div>
           )}
         </Row>
         <Row className="middle__content">
-          <Col span={12}>
-            <Card
-              cover={
-                <img
-                  alt="example"
-                  src="https://media.istockphoto.com/photos/white-bathroom-picture-id187222933?k=20&m=187222933&s=170667a&w=0&h=ImTqUTwJ-q7EN5iYBuBNgjGzuzCNvYXfYA0KhknbyzM="
-                  height="80px"
-                />
-              }
-              className="detail-card"
-            >
-              {bathroom_quantity}
-            </Card>
-            <Card
-              cover={
-                <img
-                  alt="example"
-                  src="https://media.istockphoto.com/photos/stylish-bedroom-interior-in-trendy-blue-picture-id1191685303?k=20&m=1191685303&s=612x612&w=0&h=5u54Q_8060N8e0Pc4iuu_PPCFkniSuoNxLbIKbcEf_4="
-                  height="80px"
-                />
-              }
-              className="detail-card"
-            >
-              {bedroom_quantity}
-            </Card>
-            <Card
-              cover={
-                <img
-                  alt="example"
-                  src="https://t4.ftcdn.net/jpg/01/13/27/09/360_F_113270995_v0RgIm4UIV0VFJw30vM4ZeptxaeHZOuK.jpg"
-                  height="80px"
-                />
-              }
-              className="detail-card"
-            >
-              {parking_slot_quantity}
-            </Card>
-            <Card
-              cover={
-                <img
-                  alt="example"
-                  src="https://previews.123rf.com/images/andreypopov/andreypopov1701/andreypopov170101095/69612931-different-size-of-houses-arranged-in-row-on-grassy-field.jpg"
-                  height="80px"
-                />
-              }
-              className="detail-card"
-            >
-              {area}
-            </Card>
+          <Col span={15}>
+            <Col span={6}>
+              <Card
+                cover={
+                  <img
+                    alt="example"
+                    src="https://media.istockphoto.com/photos/modern-bathroom-interior-stock-photo-picture-id1291917591?b=1&k=20&m=1291917591&s=170667a&w=0&h=YMZgTCdZ4TZCZCMbr6yjcFUJ0JxFeQmtWagi7WdFAio="
+                    height="auto"
+                  />
+                }
+                className="detail-card"
+              >
+                <span>Bathrooms:</span>
+                {bathroom_quantity}
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card
+                cover={
+                  <img
+                    alt="example"
+                    src="https://media.istockphoto.com/photos/modern-bedroom-interior-stock-photo-picture-id1303674434?b=1&k=20&m=1303674434&s=170667a&w=0&h=3kh7SUeHkl4BelpLfV8SLt0T_6XSJdEayjXIyW17aeg="
+                    height="auto"
+                  />
+                }
+                className="detail-card"
+              >
+                <span>Bedrooms:</span>
+                {bedroom_quantity}
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card
+                cover={
+                  <img
+                    alt="example"
+                    src="https://t4.ftcdn.net/jpg/01/13/27/09/360_F_113270995_v0RgIm4UIV0VFJw30vM4ZeptxaeHZOuK.jpg"
+                    height="auto"
+                  />
+                }
+                className="detail-card"
+              >
+                <span>Parking Slots:</span>
+                {parking_slot_quantity}
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card
+                cover={
+                  <img
+                    alt="example"
+                    src="https://previews.123rf.com/images/andreypopov/andreypopov1701/andreypopov170101095/69612931-different-size-of-houses-arranged-in-row-on-grassy-field.jpg"
+                    height="auto"
+                  />
+                }
+                className="detail-card"
+              >
+                <span>Area in m2:</span>
+                {area}
+              </Card>
+            </Col>
           </Col>
-          <Col span={9} offset={2}>
+          <Col span={6} offset={1}>
             <h1>Description</h1>
             <span>{description}</span>
           </Col>
