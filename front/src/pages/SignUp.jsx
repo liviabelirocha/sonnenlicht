@@ -1,5 +1,9 @@
-import { Button, Checkbox, Col, Form, Input } from 'antd'
+import { Alert, Button, Checkbox, Col, Form, Input } from 'antd'
+import axios from 'axios'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
+import { useUserData } from '../hooks/useUserData'
 
 const StyledContainer = styled.div(
   () => css`
@@ -14,12 +18,48 @@ const StyledContainer = styled.div(
     > div {
       width: 50%;
     }
+
+    .login-alert {
+      margin-bottom: 3vh;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .registerButton {
+      margin-left: 2vw;
+    }
   `
 )
 
 const SignUp = () => {
-  const onFinish = (values) => {
-    console.log('Success:', values)
+  const [email, setUserName] = useState()
+  const [password, setPassword] = useState()
+  const [hasAlert, setHasAlert] = useState(false)
+
+  const [stepForm] = Form.useForm()
+
+  const { setUserData } = useUserData()
+
+  const navigate = useNavigate()
+
+  const registerUser = async (body) => {
+    const completeBody = {...body, role: "Owner"}
+    try {
+      const res = await axios
+        .post('https://sonnenlicht-back.herokuapp.com/api/register', completeBody)
+      return res.data
+    } catch (error) {
+      setHasAlert(true)
+    }
+  }
+
+  const onFinish = async (values) => {
+    const formData = stepForm.getFieldsValue()
+    const data = await registerUser(formData)
+    navigate("/")
+    console.log(data)
   }
 
   const onFinishFailed = (errorInfo) => {
@@ -33,6 +73,7 @@ const SignUp = () => {
           <h1>Register</h1>
         </Col>
         <Form
+          form={stepForm}
           name="basic"
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
@@ -42,47 +83,41 @@ const SignUp = () => {
           autoComplete="off"
         >
           <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
             label="Email"
             name="email"
-            rules={[{ required: true, message: 'Please input your email!' }]}
+            rules={[{ required: true, message: 'Please input an email!' }]}
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Phone Number"
-            name="phoneNumber"
-            rules={[{ required: true, message: 'Please input your phone number!' }]}
-          >
-            <Input />
+            <Input onChange={(e) => setUserName(e.target.value)} />
           </Form.Item>
 
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[{ required: true, message: 'Please input a password!' }]}
           >
-            <Input.Password />
+            <Input.Password onChange={(e) => setPassword(e.target.value)} />
           </Form.Item>
 
           <Form.Item
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{ offset: 4, span: 16 }}
+            label="Phone Number"
+            name="phoneNumber"
+            rules={[{ required: true, message: 'Please input a phone number!' }]}
           >
-            <Checkbox>Remember me</Checkbox>
+            <Input onChange={(e) => setPassword(e.target.value)} />
           </Form.Item>
 
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: 'Please input a name!' }]}
+          >
+            <Input onChange={(e) => setPassword(e.target.value)} />
+          </Form.Item>
+
+          <Alert className={`login-alert ${!hasAlert && 'hidden'}`} message="Invalid data!" type="error" />
+
           <Form.Item wrapperCol={{ offset: 4, span: 16 }}>
-            <Button className='signUpButton' type="primary" htmlType="submit">
+            <Button className="signInButton" type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>

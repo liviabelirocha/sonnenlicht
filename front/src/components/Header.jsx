@@ -98,6 +98,9 @@ const Header = () => {
             <b>Login</b>
           </Button>
         )}
+        <Button onClick={() => navigate('/signup')}>
+          <b>Register</b>
+        </Button>
       </Row>
     </StyledHeader>
   )
