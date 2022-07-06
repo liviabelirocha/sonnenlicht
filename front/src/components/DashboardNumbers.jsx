@@ -54,13 +54,6 @@ const DashboardNumbers = ({ pending_reviews = 69, houses_available = 420 }) => {
           </span>
           <span>pending reviews</span>
         </div>
-        <div className="houses_available">
-          <span>
-            You have{' '}
-            <StyledNumber color="green">{houses_available}</StyledNumber>
-          </span>
-          <span>houses available</span>
-        </div>
       </div>
     </StyledDashboardNumbers>
   )

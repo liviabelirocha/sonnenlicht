@@ -20,12 +20,17 @@ const StyledStatus = styled.div(
 
 const Card = ({
   title,
-  details,
-  img,
+  description,
+  img = 'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096',
   price,
   handleClick = () => {},
   status = '',
 }) => {
+  const correctStatus = {
+    pending: "warning",
+    approved: "success",
+    rejected: "error"
+  }
   return (
     <div className="card" onClick={handleClick}>
       <div className="card__content">
@@ -37,7 +42,7 @@ const Card = ({
           {status ? (
             <Col span={2}>
               <StyledStatus>
-                <Badge status={`${status}`} />
+                <Badge status={`${correctStatus[status]}`} />
               </StyledStatus>
             </Col>
           ) : (
@@ -45,11 +50,7 @@ const Card = ({
           )}
           <p className="card__price">R${price}</p>
         </Row>
-        {details.map((detail, index) => (
-          <p className="card__details" key={`detail-${index}`}>
-            {detail}
-          </p>
-        ))}
+        {description}
       </div>
     </div>
   )

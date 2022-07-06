@@ -1,9 +1,16 @@
 @import '../utils/variables.scss';
 
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .home-layout {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 100%;
 }
 
 .filter_section {
@@ -27,4 +34,9 @@
   &__title-section {
     margin: 0 0 5vh 3vw;
   }
+}
+
+.footer {
+  margin-top: 8.5vh;
+  height: auto;
 }

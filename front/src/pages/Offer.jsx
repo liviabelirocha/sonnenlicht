@@ -1,8 +1,11 @@
-import { Col, Row, Card, Avatar, Button } from 'antd'
+import { Col, Row, Card, Avatar, Button, Spin } from 'antd'
 import { CheckOutlined, CloseOutlined, CompassFilled } from '@ant-design/icons'
 import { useParams } from 'react-router-dom'
 
 import styled, { css } from 'styled-components'
+import axios from 'axios'
+import { useUserData } from '../hooks/useUserData'
+import { useState } from 'react'
 
 export const defaultBackground =
   'https://pbs.twimg.com/media/FS_UvxeWYAEmFmV?format=jpg&name=4096x4096'
@@ -12,17 +15,17 @@ const renderStatus = (status, options) => {
     ? options.normal
     : status === 'approved'
     ? options.approved
-    : status === 'reproved'
-    ? options.reproved
+    : status === 'rejected'
+    ? options.rejected
     : status === 'pending'
     ? options.pending
     : ''
 }
 
-const makeOptions = (normal, approved, reproved, pending) => ({
+const makeOptions = (normal, approved, rejected, pending) => ({
   normal,
   approved,
-  reproved,
+  rejected,
   pending,
 })
 
@@ -59,7 +62,6 @@ const StyledOffer = styled.section(
       }
 
       > div:not(:first-child) {
-        position: absolute;
         border-radius: 20px 20px 0 0;
       }
 
@@ -77,12 +79,14 @@ const StyledOffer = styled.section(
         display: block;
         padding: 3vh 0 0 2vw;
 
-        height: 40vh;
+        min-height: 40vh;
+        height: auto;
         margin-top: -10vh;
         background-color: #fefdf9;
 
         .middle_header {
           display: flex;
+          flex-direction: row;
           justify-content: space-between;
 
           .name_location {
@@ -108,6 +112,11 @@ const StyledOffer = styled.section(
             }
           }
 
+          .complemental-offer-info {
+            font-size: 0.9rem;
+            margin-right: 5vw;
+          }
+
           .validation__container {
             display: flex;
             justify-content: space-between;
@@ -128,23 +137,43 @@ const StyledOffer = styled.section(
         }
 
         .middle__content {
-          margin-top: 2vh;
-          max-height: 15vh;
+          margin-top: 1.5vh;
+          height: auto;
+          margin-bottom: 1vh;
 
           > div:first-child {
             display: flex;
             justify-content: space-evenly;
-            padding-right: 10vw;
 
             .detail-card {
-              width: 120px;
-              height: 120px;
+              height: auto;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              font-weight: 600;
+
+              .ant-card-body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0;
+
+                > span {
+                  margin-bottom: 0.5vh;
+                  width: auto;
+                }
+              }
             }
           }
 
           > div:nth-child(2) {
+            > h1 {
+              font-size: 1.5rem;
+              font-weight: 600;
+            }
             > span {
-              font-weight: 400;
+              font-size: 1rem;
             }
           }
         }
@@ -153,7 +182,6 @@ const StyledOffer = styled.section(
       > div:nth-child(3) {
         z-index: 1;
         height: 15vh;
-        margin-top: 25vh;
         background-color: ${renderStatus(
           status,
           makeOptions('#fa7456', '#008937', '#9F3000', '#FA7456')
@@ -191,17 +219,16 @@ const StyledOffer = styled.section(
 
 const StyledButton = styled.div(
   () => css`
-    .ant-btn {
-      color: #fa7456;
-
-      &:hover {
-        border-color: #fa7456;
-      }
+    display: flex;
+    flex-direction: column;
+    > h2 {
+      color: #fff;
     }
   `
 )
 
-const LowerBarOwner = () => {
+const LowerBarOwner = (props) => {
+  const { name, phone_number, email } = props.User
   return (
     <>
       <Col>
@@ -211,15 +238,14 @@ const LowerBarOwner = () => {
         />
         <div>
           <h1>
-            <b>Werner Siegfried</b>
+            <b>{name}</b>
           </h1>
           <p>Property Owner</p>
         </div>
       </Col>
       <StyledButton>
-        <Button size="large">
-          <b>Contact</b>
-        </Button>
+        <h2>Phone Number: {phone_number ? phone_number : '-'}</h2>
+        <h2>Email: {email}</h2>
       </StyledButton>
     </>
   )
@@ -229,7 +255,7 @@ const StyledLowerBarStatus = styled.div(
   ({ status }) => css`
     display: flex;
     width: 100%;
-    justify-content: ${status !== 'reproved' ? 'center' : 'space-evenly'};
+    justify-content: ${status !== 'rejected' ? 'center' : 'space-evenly'};
     align-items: center;
     color: white;
     font-size: 1.5rem;
@@ -257,25 +283,58 @@ const LowerBarStatus = ({
   return (
     <StyledLowerBarStatus status={status} span={24}>
       {statusName}
-      {status === 'reproved' && <span>{description}</span>}
+      {status === 'rejected' && <span>{description}</span>}
     </StyledLowerBarStatus>
   )
 }
 
+const { Meta } = Card
+
 const Offer = ({
   price = '$ 200.000',
+  id,
   title = 'Family size House',
   description = MOCK_DEFAULT_DESCRIPTION,
+  address_location = 'Berlin',
+  address_number,
+  address_street,
+  area,
+  bathroom_quantity,
+  bedroom_quantity,
+  offer_type,
+  parking_slot_quantity,
+  property_type,
   status = 'normal',
+  Owner,
   adminValidation = false,
 }) => {
   const params = useParams()
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { userData } = useUserData()
+
+  const handleAction = async (action) => {
+    setIsLoading(true)
+    console.log(id)
+    await axios.patch(
+      `https://sonnenlicht-back.herokuapp.com/api/${action}/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      }
+    )
+    window.location.reload()
+    setIsLoading(false)
+  }
 
   return (
     <StyledOffer status={status}>
       <Row>
         <div className="price">
-          <span>{price}</span>
+          <span>${price}</span>
         </div>
       </Row>
       <Row>
@@ -287,34 +346,104 @@ const Offer = ({
               </span>
               <div>
                 <CompassFilled />
-                <div>Berlin</div>
+                <div>{address_location}</div>
               </div>
+            </div>
+          </Col>
+          <Col>
+            <div className="complemental-offer-info">
+              <span>
+                <b>Address: {address_street}, {address_number}</b>
+              </span> <br />
+              <span>Offer Type: {offer_type}</span> <br />
+              <span>Property Type: {property_type}</span> <br />
             </div>
           </Col>
           {adminValidation && (
             <div className="validation__container">
-              <Button
-                type="primary"
-                shape="round"
-                icon={<CheckOutlined />}
-                size={'large'}
-              />
-              <Button
-                type="primary"
-                shape="round"
-                icon={<CloseOutlined />}
-                size={'large'}
-              />
+              <Spin spinning={isLoading}>
+                <Button
+                  type="primary"
+                  shape="round"
+                  icon={<CheckOutlined />}
+                  size={'large'}
+                  onClick={() => handleAction('approve')}
+                />
+                <Button
+                  type="primary"
+                  shape="round"
+                  icon={<CloseOutlined />}
+                  size={'large'}
+                  onClick={() => handleAction('reject')}
+                />
+              </Spin>
             </div>
           )}
         </Row>
         <Row className="middle__content">
-          <Col span={12}>
-            <Card className="detail-card" />
-            <Card className="detail-card" />
-            <Card className="detail-card" />
+          <Col span={15}>
+            <Col span={6}>
+              <Card
+                cover={
+                  <img
+                    alt="example"
+                    src="https://media.istockphoto.com/photos/modern-bathroom-interior-stock-photo-picture-id1291917591?b=1&k=20&m=1291917591&s=170667a&w=0&h=YMZgTCdZ4TZCZCMbr6yjcFUJ0JxFeQmtWagi7WdFAio="
+                    height="auto"
+                  />
+                }
+                className="detail-card"
+              >
+                <span>Bathrooms:</span>
+                {bathroom_quantity}
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card
+                cover={
+                  <img
+                    alt="example"
+                    src="https://media.istockphoto.com/photos/modern-bedroom-interior-stock-photo-picture-id1303674434?b=1&k=20&m=1303674434&s=170667a&w=0&h=3kh7SUeHkl4BelpLfV8SLt0T_6XSJdEayjXIyW17aeg="
+                    height="auto"
+                  />
+                }
+                className="detail-card"
+              >
+                <span>Bedrooms:</span>
+                {bedroom_quantity}
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card
+                cover={
+                  <img
+                    alt="example"
+                    src="https://t4.ftcdn.net/jpg/01/13/27/09/360_F_113270995_v0RgIm4UIV0VFJw30vM4ZeptxaeHZOuK.jpg"
+                    height="auto"
+                  />
+                }
+                className="detail-card"
+              >
+                <span>Parking Slots:</span>
+                {parking_slot_quantity}
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card
+                cover={
+                  <img
+                    alt="example"
+                    src="https://previews.123rf.com/images/andreypopov/andreypopov1701/andreypopov170101095/69612931-different-size-of-houses-arranged-in-row-on-grassy-field.jpg"
+                    height="auto"
+                  />
+                }
+                className="detail-card"
+              >
+                <span>Area in m2:</span>
+                {area}
+              </Card>
+            </Col>
           </Col>
-          <Col span={11}>
+          <Col span={6} offset={1}>
             <h1>Description</h1>
             <span>{description}</span>
           </Col>
@@ -324,7 +453,7 @@ const Offer = ({
         {renderStatus(
           status,
           makeOptions(
-            <LowerBarOwner />,
+            <LowerBarOwner {...Owner} status="normal" />,
             <LowerBarStatus status="approved" statusName="Approved" />,
             <LowerBarStatus status="reproved" statusName="Reproved" />,
             <LowerBarStatus status="pending" statusName="Pending" />
